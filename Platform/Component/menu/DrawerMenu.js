@@ -30,6 +30,9 @@ export default class Menu extends Component {
                 <View style={[{height : 150, width : layoutWidth, backgroundColor: "#59C2AF"}]}>
                     <Text style={{textAlign:"center"}} >testef</Text>
                 </View>
+                <View style={[{height : this.state.height - 150, width : layoutWidth, backgroundColor: "#FFF"}]}>
+                    <Text style={{textAlign:"center"}} >testef</Text>
+                </View>
             </View>
             );
     }

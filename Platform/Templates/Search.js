@@ -50,8 +50,7 @@ export default class Search extends Component {
 	}
 
 	async componentDidMount() {
-
-		var paramsArray = this.props.navigation.state.params;
+		var paramsArray = this.props.value;
 		if(paramsArray != null){
 			var searchText = this.getValueFromArray(paramsArray, 'searchText');
 			var categoryId = this.getValueFromArray(paramsArray, 'categoryId');
@@ -128,7 +127,7 @@ export default class Search extends Component {
 	constructTemplate(item){
 		return <SearchAdsContent imgWidth={this.state.width-50} 
 					imgHeight={150} 
-					navigation={this.props.navigation} 
+					navigation={this.props.navigateTo}
 					postJson={item}/>;
 	}
 

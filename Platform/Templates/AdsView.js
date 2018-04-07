@@ -46,7 +46,7 @@ export default class AdsView extends Component {
 
 
 	async componentDidMount() {
-	        var paramsData = this.props.navigation.state.params;
+	        var paramsData = this.props.value;
 		var singleAdsJson = null;
 		var adsgalleryDetails = null;
 		var that = this;

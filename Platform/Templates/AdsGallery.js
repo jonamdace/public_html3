@@ -70,9 +70,10 @@ export default class AdsGallery extends Component {
 	}
 
 	async componentDidMount() {
-		this.updateMyState(this.props.navigation.state.params.data, 'adsgalleryDetails');
-		this.updateMyState(this.props.navigation.state.params.singleAdsJson[0].adsCode, 'adsCode');
-		this.updateMyState(this.props.navigation.state.params.singleAdsJson[0].userCode, 'userCode');
+		var singleAdsJson = this.props.value['singleAdsJson'];
+		this.updateMyState(this.props.value['data'], 'adsgalleryDetails');
+		this.updateMyState(singleAdsJson[0].adsCode, 'adsCode');
+		this.updateMyState(singleAdsJson[0].userCode, 'userCode');
 	}
 
 	updateMyState(value, keyName){

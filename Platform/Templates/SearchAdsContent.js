@@ -21,12 +21,11 @@ export default class SearchAdsContent extends Component {
 	    	super(props);
 		this.state = {
 		};
-		this.navigate=this.props.navigateTo;
-		
+
 	}
 
 	onPressToShowSingleAds(postJson){
-		this.navigate('AdsView', postJson);
+		this.props.navigation('AdsView', postJson);
 		//this.props.navigation.navigate('AdsView', postJson);
 	}
 

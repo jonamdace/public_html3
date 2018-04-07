@@ -40,7 +40,7 @@ export default class Login extends Component {
 			inputMobileNumber : '',
 			inputPassword : ''
 		};
-		this.navigate=this.props.navigation.navigate;
+		this.navigate=this.props.navigateTo;
 		this.onFocus = this.onFocus.bind(this);
 		this.onFocusOtp = this.onFocusOtp.bind(this);
 		this.focusNextField = this.focusNextField.bind(this);
