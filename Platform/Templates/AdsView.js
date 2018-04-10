@@ -73,9 +73,8 @@ export default class AdsView extends Component {
 		});
 	}
 
-	onPressRedirectToGoBack(routes){
-    		this.props.navigation.goBack();
-		this.navigate(routes);
+	onPressRedirectToGoBack(){
+		this.props.navigator.pop();
 	}
 
 	onPressRedirectToPassData(routes, postJson){

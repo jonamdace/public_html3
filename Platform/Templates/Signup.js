@@ -7,7 +7,7 @@ import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
 import { doPost } from "../Component/MKActions";
 import MKSpinner from "../Component/MKSpinner";
-
+import { Container, Navbar } from 'navbar-native';
 var MessageBarAlert = require('react-native-message-bar').MessageBar;
 var MessageBarManager = require('react-native-message-bar').MessageBarManager;
 
@@ -312,9 +312,6 @@ export default class Login extends Component {
 			{ inputPasswordError }
 
 			<View style={{paddingTop: 30}}></View>
-			<TouchableOpacity onPress={()=> this.onPressRedirect('ForgotPassword')}>
-				<Text style={{textAlign:'right', color: '#60AAC6', fontSize: 14}}>FORGOT PASSWORD?</Text>
-			</TouchableOpacity>
 		</View>;
 		var dynamicBtn = <MKButton onPress={()=> this.doSignup()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
 			SIGN UP
@@ -348,6 +345,15 @@ export default class Login extends Component {
 
 		return (
 			<View style={[{height : this.state.height, flex: 1, width : layoutWidth}]} onLayout={()=> this.updateLayout()}>
+				<Navbar
+				    title={"Sign up"}
+				    bgColor={'orange'}
+				    left={{
+					icon: "ios-arrow-back",
+					onPress: () => this.onPressRedirect('HomeScreen')
+				    }}
+				    style={{height:60}}
+				/>				
 				<ScrollView >
 					{otpContent}
 				</ScrollView>

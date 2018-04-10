@@ -15,6 +15,7 @@ import {
 	AsyncStorage
 	} from "react-native";
 
+import { Container, Navbar } from 'navbar-native';
 import MKSpinner from "../Component/MKSpinner";
 import SearchAdsContent from "./SearchAdsContent";
 import { doPost } from "../Component/MKActions";
@@ -147,6 +148,15 @@ export default class Search extends Component {
     		return ( 
 			<View style={[{height : this.state.height, flex: 1, width : layoutWidth, backgroundColor:'#59C2AF'}]} 
 				onLayout={()=> this.updateLayout()} >
+				<Navbar
+					title={"Ads List"}
+					bgColor={'orange'}
+					left={{
+						icon: "ios-arrow-back",
+						onPress: () => this.onPressRedirect('Dashboard')
+					}}
+					style={{height:60}}
+					/>
 				<ScrollView >
 					<ListView style={{paddingBottom:15}} dataSource={this.state.listItems} 
 						renderRow={(item) => this.constructTemplate(item)} 

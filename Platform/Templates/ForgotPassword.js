@@ -1,7 +1,7 @@
 'use strict';
 import React, {Component, PropTypes} from "react";
 import {View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage} from "react-native";
-
+import { Container, Navbar } from 'navbar-native';
 import CommonStyle from "../Styles/CommonStyle";
 import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
@@ -352,6 +352,15 @@ export default class Login extends Component {
 
 		return (
 		<View style={[{height : this.state.height, flex: 1, width : layoutWidth}]} onLayout={()=> this.updateLayout()}>
+			<Navbar
+			    title={"Forgot Password"}
+			    bgColor={'orange'}
+			    left={{
+				icon: "ios-arrow-back",
+				onPress: () => this.onPressRedirect('Login')
+			    }}
+			    style={{height:60}}
+			/>
 			<ScrollView >
 		      		<View style={{flex: 1, width:inputWidth, alignSelf:'center'}}>				
 					{otpContent}

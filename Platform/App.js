@@ -11,7 +11,6 @@ import {
   StyleSheet, AsyncStorage, ToastAndroid
 } from 'react-native';
 
-import MKSpinner from "./Component/MKSpinner";
 import Drawer from 'react-native-drawer';
 import { doPost } from "./Component/MKActions";
 import MKTextInput from "./Component/MKTextInput";
@@ -102,6 +101,7 @@ export default class App extends Component {
 	}
 
 	navigateToMenu(route,props) {
+		this.setDrawerState();
 		if(route=="Login"){
 			this._navigator.resetTo(
 				{
@@ -169,8 +169,6 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 				})}
 				>                          
 				<MyCustomizedNavBar title={"Apps Form Entry"} />
-				<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
 					<AdPostPageOne navigator={navigator} 
 						{...route.passProps} 
 						navigateTo={this.navigateTo} 
@@ -191,9 +189,7 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 				})}
 				>                          
 				<MyCustomizedNavBar title={"Category"} />
-				<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
-					<Dashboard navigator={navigator} 
+				<Dashboard navigator={navigator}
 						{...route.passProps} 
 						navigateTo={this.navigateTo} 
 						updateLoginStatus={this.updateLoginStatus} 
@@ -206,53 +202,39 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 
 		case 'Signup':
 			return <View style={{ flex: 1 }}>
-        			<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
 			<Signup navigator={navigator} {...route.passProps} 
 navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
 				</View>;
 		case 'Login':
 			return <View style={{ flex: 1 }}>
-        			<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
 			<Login navigator={navigator} {...route.passProps} 
 navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
 				</View>;
 
 		case 'SearchAdsContent':
 			return <View style={{ flex: 1 }}>
-        			<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
 			<SearchAdsContent navigator={navigator} {...route.passProps} 
 navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
 				</View>;
 		case 'AdsGallery':
 			return <View style={{ flex: 1 }}>
-        			<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
 			<AdsGallery navigator={navigator} {...route.passProps} 
 navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
 				</View>;
 		case 'Search':
 			return <View style={{ flex: 1 }}>
-        			<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
 			<Search navigator={navigator} {...route.passProps} 
 navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
 				</View>;
 
 		case 'SearchHistory':
 			return <View style={{ flex: 1 }}>
-        			<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
 			<SearchHistory navigator={navigator} {...route.passProps} 
 navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
 				</View>;
 
 		case 'ForgotPassword':
 			return <View style={{ flex: 1 }}>
-        			<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
 			<ForgotPassword navigator={navigator} {...route.passProps} 
 navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
 				</View>;
@@ -270,8 +252,6 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 				})}
 				>                          
 				<MyCustomizedNavBar title={"Change Password"} />
-				<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
 					<ChangePassword navigator={navigator} 
 						{...route.passProps} 
 						navigateTo={this.navigateTo} 
@@ -280,30 +260,19 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 			</Drawer>;
 
 		case 'AdsView':
-			return <Drawer type="overlay" content={<DrawerMenu navigate={this.navigateToMenu} 
-				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
-				tapToClose={true}
-				openDrawerOffset={0.2} // 20% gap on the right side of drawer
-				panCloseMask={0.2}
-				closedDrawerOffset={-3}
-				styles={drawerStyles}
-				tweenHandler={(ratio) => ({
-					main: { opacity:(2-ratio)/2 }
-				})}
-				>                          
-				<MyCustomizedNavBar title={"Apps List"} />
-				<MKSpinner visible={this.state.visible} cancelable={this.state.cancelable} textContent={"Please wait"}
-					textStyle={{color: '#FFF'}} />
-					<AdsView navigator={navigator} 
+			return <AdsView navigator={navigator}
 						{...route.passProps} 
 						navigateTo={this.navigateTo} 
 						updateLoginStatus={this.updateLoginStatus} 
-						updateLoading={this.updateLoading} />
-			</Drawer>;
+						updateLoading={this.updateLoading} />;
 
 		default:
-			return <Login navigator={navigator} {...route.passProps} 
-navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />;
+			return <Login navigator={navigator}
+						{...route.passProps}
+						navigateTo={this.navigateTo}
+						updateLoginStatus={this.updateLoginStatus}
+						updateLoading={this.updateLoading} />;
+
                     	}
             	}}
 		configureScene={(route, routeStack) =>
