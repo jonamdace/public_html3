@@ -33,6 +33,9 @@ import AdPostPageOne from "./Templates/AdPostPageOne";
 import AdPostPageTwo from "./Templates/AdPostPageTwo";
 
 
+import ViewAllMyAds from "./Templates/ViewAllMyAds";
+
+
 const drawerStyles = {
   drawer: { shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
   main: {paddingLeft: 0},
@@ -144,7 +147,9 @@ export default class App extends Component {
 	// Common functions End
 
 	render() {
-		var initialRoutes = 'HomeScreen';
+		//var initialRoutes = 'HomeScreen';
+		var initialRoutes = 'ViewAllMyAds';
+
 		const  loginStatus  = this.state.loginStatus;
     		return(
 
@@ -256,6 +261,26 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						{...route.passProps} 
 						navigateTo={this.navigateTo} 
 						updateLoginStatus={this.updateLoginStatus} 
+						updateLoading={this.updateLoading} />
+			</Drawer>;
+
+		case 'ViewAllMyAds':
+			return <Drawer type="overlay" content={ <DrawerMenu navigate={this.navigateToMenu}
+				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
+				tapToClose={true}
+				openDrawerOffset={0.2} // 20% gap on the right side of drawer
+				panCloseMask={0.2}
+				closedDrawerOffset={-3}
+				styles={drawerStyles}
+				tweenHandler={(ratio) => ({
+					main: { opacity:(2-ratio)/2 }
+				})}
+				>
+				<MyCustomizedNavBar title={"View All My Ads"} />
+					<ViewAllMyAds navigator={navigator}
+						{...route.passProps}
+						navigateTo={this.navigateTo}
+						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
 			</Drawer>;
 
