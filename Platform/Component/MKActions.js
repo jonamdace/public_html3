@@ -9,7 +9,7 @@ export async function doPost(subUrl, postJsonData){
   			'Accept': 'application/json',
   			'Content-Type': 'multipart/form-data;'		},
 		body: postJsonData
-	}).then((response) => response.json()).then((responseJson) => { return responseJson; }) 
+	}).then((response) => response.json()).then((responseJson) => { return responseJson; })
 	return response; 
 }
 

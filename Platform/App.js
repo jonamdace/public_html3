@@ -33,7 +33,10 @@ import AdPostPageOne from "./Templates/AdPostPageOne";
 import AdPostPageTwo from "./Templates/AdPostPageTwo";
 
 
+import ContactUs from "./Templates/ContactUs";
+import MyProfile from "./Templates/MyProfile";
 import ViewAllMyAds from "./Templates/ViewAllMyAds";
+import ChangePassword from "./Templates/ChangePassword";
 
 
 const drawerStyles = {
@@ -148,7 +151,7 @@ export default class App extends Component {
 
 	render() {
 		//var initialRoutes = 'HomeScreen';
-		var initialRoutes = 'ViewAllMyAds';
+		var initialRoutes = 'MyProfile';
 
 		const  loginStatus  = this.state.loginStatus;
     		return(
@@ -167,7 +170,7 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 				tapToClose={true}
 				openDrawerOffset={0.2} // 20% gap on the right side of drawer
 				panCloseMask={0.2}
-				closedDrawerOffset={-3}
+				closedDrawerOffset={0}
 				styles={drawerStyles}
 				tweenHandler={(ratio) => ({
 					main: { opacity:(2-ratio)/2 }
@@ -187,7 +190,7 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 				tapToClose={true}
 				openDrawerOffset={0.2} // 20% gap on the right side of drawer
 				panCloseMask={0.2}
-				closedDrawerOffset={-3}
+				closedDrawerOffset={0}
 				styles={drawerStyles}
 				tweenHandler={(ratio) => ({
 					main: { opacity:(2-ratio)/2 }
@@ -250,17 +253,17 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 				tapToClose={true}
 				openDrawerOffset={0.2} // 20% gap on the right side of drawer
 				panCloseMask={0.2}
-				closedDrawerOffset={-3}
+				closedDrawerOffset={0}
 				styles={drawerStyles}
 				tweenHandler={(ratio) => ({
 					main: { opacity:(2-ratio)/2 }
 				})}
-				>                          
+				>
 				<MyCustomizedNavBar title={"Change Password"} />
-					<ChangePassword navigator={navigator} 
-						{...route.passProps} 
-						navigateTo={this.navigateTo} 
-						updateLoginStatus={this.updateLoginStatus} 
+					<ChangePassword navigator={navigator}
+						{...route.passProps}
+						navigateTo={this.navigateTo}
+						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
 			</Drawer>;
 
@@ -270,7 +273,7 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 				tapToClose={true}
 				openDrawerOffset={0.2} // 20% gap on the right side of drawer
 				panCloseMask={0.2}
-				closedDrawerOffset={-3}
+				closedDrawerOffset={0}
 				styles={drawerStyles}
 				tweenHandler={(ratio) => ({
 					main: { opacity:(2-ratio)/2 }
@@ -278,6 +281,46 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 				>
 				<MyCustomizedNavBar title={"View All My Ads"} />
 					<ViewAllMyAds navigator={navigator}
+						{...route.passProps}
+						navigateTo={this.navigateTo}
+						updateLoginStatus={this.updateLoginStatus}
+						updateLoading={this.updateLoading} />
+			</Drawer>;
+
+		case 'MyProfile':
+			return <Drawer type="overlay" content={ <DrawerMenu navigate={this.navigateToMenu}
+				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
+				tapToClose={true}
+				openDrawerOffset={0.2} // 20% gap on the right side of drawer
+				panCloseMask={0.2}
+				closedDrawerOffset={0}
+				styles={drawerStyles}
+				tweenHandler={(ratio) => ({
+					main: { opacity:(2-ratio)/2 }
+				})}
+				>
+				<MyCustomizedNavBar title={"My Profile"} />
+					<MyProfile navigator={navigator}
+						{...route.passProps}
+						navigateTo={this.navigateTo}
+						updateLoginStatus={this.updateLoginStatus}
+						updateLoading={this.updateLoading} />
+			</Drawer>;
+
+		case 'ContactUs':
+			return <Drawer type="overlay" content={ <DrawerMenu navigate={this.navigateToMenu}
+				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
+				tapToClose={true}
+				openDrawerOffset={0.2} // 20% gap on the right side of drawer
+				panCloseMask={0.2}
+				closedDrawerOffset={0}
+				styles={drawerStyles}
+				tweenHandler={(ratio) => ({
+					main: { opacity:(2-ratio)/2 }
+				})}
+				>
+				<MyCustomizedNavBar title={"Contact Us"} />
+					<ContactUs navigator={navigator}
 						{...route.passProps}
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}

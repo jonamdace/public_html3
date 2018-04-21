@@ -66,7 +66,7 @@ export default class DrawerMenu extends Component {
         var dataArray = [
             {'routes': 'Dashboard', title: 'Home'},
             {'routes': 'Login', title: 'Login'},
-            {'routes': 'Register', title: 'Register'},
+            {'routes': 'Signup', title: 'Signup'},
             {'routes': 'ContactUs', title: 'Contact Us'}
         ];
 
@@ -105,8 +105,8 @@ export default class DrawerMenu extends Component {
                 {'routes': 'ViewAllMyAds', title: 'View All My Ads'},
                 {'routes': 'nearByYouAds', title: 'Near By You Ads'},
                 {'routes': 'Bookmarked', title: 'View All My Bookmarked'},
-                {'routes': 'MyAccount', title: 'View My Profile'},
-                {'routes': 'ChangeMyPassword', title: 'Change Password'},
+                {'routes': 'MyProfile', title: 'View My Profile'},
+                {'routes': 'ChangePassword', title: 'Change Password'},
                 {'routes': 'History', title: 'History'},
                 {'routes': 'Logout', title: 'Sign out'},
                 {'routes': 'ContactUs', title: 'Contact Us'},
@@ -132,7 +132,7 @@ export default class DrawerMenu extends Component {
             if(route === "Logout"){
                 objArray.push(
                     <View key={index}
-                          style={{ borderBottomWidth : 0.5, paddingBottom: 15,paddingLeft: 15, paddingTop: 15, borderColor : 'grey'}}>
+                          style={{ borderBottomWidth : 0.5, paddingBottom: 15,paddingLeft: 15, paddingTop: 15, borderColor : '#16a085'}}>
                         <TouchableOpacity onPress={()=>that.onPressToLogout()}>
                             <View style={{flexDirection: 'row'}}>
                                 <Text style={{fontWeight : 'bold', color : 'grey'}}>{title}</Text>
@@ -143,7 +143,7 @@ export default class DrawerMenu extends Component {
             } else {
                 objArray.push(
                     <View key={index}
-                          style={{ borderBottomWidth : 0.5, paddingBottom: 15,paddingLeft: 15, paddingTop: 15, borderColor : 'grey'}}>
+                          style={{ borderBottomWidth : 0.5, paddingBottom: 15,paddingLeft: 15, paddingTop: 15, borderColor : '#16a085'}}>
                         <TouchableOpacity onPress={()=>that.onPressToRedirect(route)}>
                             <View style={{flexDirection: 'row'}}>
                                 <Text style={{fontWeight : 'bold', color : 'grey'}}>{title}</Text>
@@ -162,7 +162,7 @@ export default class DrawerMenu extends Component {
                     {userDispContent}
                 </View>
                 <ScrollView>
-                    <View style={{ backgroundColor : "#FFF"}}>
+                    <View style={{ height : this.state.height-180,backgroundColor : "#FFF", borderRightWidth: 0.5, borderRightColor:'#16a085'}}>
                     {objArray}
                     </View>
                 </ScrollView>

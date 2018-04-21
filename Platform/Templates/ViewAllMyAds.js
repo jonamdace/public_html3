@@ -38,12 +38,15 @@ export default class ViewAllMyAds extends Component {
             page: "0",
             leftRecord: 0,
             previousPage: -1,
-            nextPage: ""
+            nextPage: "",
+            searchUserId : ""
         };
         this.navigate = this.props.navigateTo;
     }
 
     async componentDidMount() {
+        var userid = await AsyncStorage.getItem('userid');
+        this.setState({searchUserId : userid});
         await this.dataLoading();
     }
 
@@ -78,16 +81,12 @@ export default class ViewAllMyAds extends Component {
         var postJson = new FormData();
         postJson.append("page", that.state.page);
         postJson.append("getListFromPage", "View All My Ads");
-        //postJson.append("city", "");
-        //postJson.append("categoryId", this.state.categoryId);
-        //postJson.append("SubcategoryId", "");
-        //postJson.append("searchText", this.state.searchText);
-        //postJson.append("searchUserId", "");
+        postJson.append("searchUserId", that.state.searchUserId);
         postJson.append("rf", "json");
         var subUrl = "searchAdsAjax";
         that.updateMyState(true, 'isLoading');
         var response = await doPost(subUrl, postJson);
-        alert(JSON.stringify(postJson))
+        //alert(JSON.stringify(postJson))
 
         setTimeout(function () {
             that.updateMyState(false, 'isLoading');
