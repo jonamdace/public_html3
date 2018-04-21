@@ -34,6 +34,7 @@ import AdPostPageTwo from "./Templates/AdPostPageTwo";
 
 
 import ContactUs from "./Templates/ContactUs";
+import EditMyProfile from "./Templates/EditMyProfile";
 import MyProfile from "./Templates/MyProfile";
 import ViewAllMyAds from "./Templates/ViewAllMyAds";
 import ChangePassword from "./Templates/ChangePassword";
@@ -151,7 +152,7 @@ export default class App extends Component {
 
 	render() {
 		//var initialRoutes = 'HomeScreen';
-		var initialRoutes = 'MyProfile';
+		var initialRoutes = 'EditMyProfile';
 
 		const  loginStatus  = this.state.loginStatus;
     		return(
@@ -306,6 +307,11 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
 			</Drawer>;
+
+		case 'EditMyProfile':
+			return <View style={{ flex: 1 }}>
+						<EditMyProfile navigator={navigator} {...route.passProps} navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
+					</View>;
 
 		case 'ContactUs':
 			return <Drawer type="overlay" content={ <DrawerMenu navigate={this.navigateToMenu}

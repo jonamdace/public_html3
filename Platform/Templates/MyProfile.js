@@ -52,6 +52,21 @@ export default class MyProfile extends Component {
         this.navigate(routes);
     }
 
+
+    renderRowData(inputWidth, label, value){
+        return <View style={{flexDirection: 'row', padding: 10}}>
+            <View style={{width : 100}}>
+                <Text style={{ fontSize: 16, fontWeight : 'bold', color : '#16a085'}}>{label}</Text>
+            </View>
+            <View style={{width: 20}}>
+                <Text style={{ fontSize: 16, color:'grey'}}>:</Text>
+            </View>
+            <View style={{width: inputWidth - 120}}>
+                <Text style={{ fontSize: 16, color:'grey'}}>{value}</Text>
+            </View>
+        </View>;
+    }
+
     render() {
         var inputWidth = this.state.width-30;
         var layoutWidth = this.state.width;
@@ -60,11 +75,11 @@ export default class MyProfile extends Component {
         var inputHighlightColor = "#00BCD4";
 
         var filePath = ConfigVariable.uploadedAdsFilePathEmpty;
-        var imgContent = <Image source={noimage} style={{width: 180, height: 180, resizeMode: Image.resizeMode.contain, alignSelf:'center', justifyContent :'center', borderRadius:90}} ></Image>;
+        var imgContent = <Image source={noimage} style={{width: 200, height: 200, resizeMode: Image.resizeMode.contain, alignSelf:'center', justifyContent :'center', borderRadius:90}} ></Image>;
         var username = this.state.username;
 
-        var dynamicBtn = <MKButton onPress={()=> this.onPressRedirect("editMyProfile")} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF',width: 140, height:60, borderRadius: 30}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
-            <Icon name="ios-create-outline" size={30} color={"#FFF"} style={{padding:10}}/> Edit Profile
+        var dynamicBtn = <MKButton onPress={()=> this.onPressRedirect("EditMyProfile")} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF',width: 100, height:50, borderRadius:5}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+            <Icon name="ios-create-outline" size={25} color={"#FFF"} /> Edit
         </MKButton>;
 
 
@@ -77,20 +92,20 @@ export default class MyProfile extends Component {
                             {imgContent}
                         </View>
                         <View style={{flexDirection: 'row'}}>
-                            <View style={{width: inputWidth - 140}}>
+                            <View style={{width: inputWidth - 100}}>
 
                             </View>
-                            <View style={{width: 140}}>
+                            <View style={{width: 100}}>
                                 {dynamicBtn}
                             </View>
                         </View>
-                        <View>
-                            <Text style={{padding: 10, fontSize: 18, color:'grey'}}><Text style={{fontSize: 18, fontWeight : 'bold', color : '#16a085'}}>Mobile : </Text><Text>834478628</Text></Text>
-                            <Text style={{padding: 10, fontSize: 18, color:'grey'}}><Text style={{fontSize: 18, fontWeight : 'bold', color : '#16a085'}}>Email : </Text><Text>mathan@mynap.in</Text></Text>
-                            <Text style={{padding: 10, fontSize: 18, color:'grey'}}><Text style={{fontSize: 18, fontWeight : 'bold', color : '#16a085'}}>State : </Text><Text>834478628</Text></Text>
-                            <Text style={{padding: 10, fontSize: 18, color:'grey'}}><Text style={{fontSize: 18, fontWeight : 'bold', color : '#16a085'}}>City : </Text><Text>834478628</Text></Text>
-                            <Text style={{padding: 10, fontSize: 18, color:'grey'}}><Text style={{fontSize: 18, fontWeight : 'bold', color : '#16a085'}}>Address :  </Text><Text>1/96 chef nn, fkhf hjh, jnjnkjf jkfjklf jkfjlkf kjklj</Text></Text>
-                        </View>
+
+                        { this.renderRowData(inputWidth, "Mobile", "8344798628") }
+                        { this.renderRowData(inputWidth, "Email", "mathan@mynap.in") }
+                        { this.renderRowData(inputWidth, "State", "8344798628") }
+                        { this.renderRowData(inputWidth, "City", "8344798628") }
+                        { this.renderRowData(inputWidth, "Address", "ghjghjg hhhj g h hghjg hghjg hjgjh gghghj hghjghj hgjhg jhgh jhggjhghjg hhj gh hghjghj") }
+
                         <View style={{paddingTop: 30}}></View>
                     </View>
                 </ScrollView>
