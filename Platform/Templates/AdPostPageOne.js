@@ -52,17 +52,18 @@ export default class AdPostPageOne extends Component {
             adsDescription : '',
             avatarSource  : null,
             avatarSourceArray  : [],
+            avatarSourcePostArray  : [],
             categoryId: '0',
             subCategoryId: "0",
             listItems: ds.cloneWithRows([]),
             listItemsSubCategoryJson: ds.cloneWithRows([]),
             ds:ds,
-            country : '',
-            state : '',
-            city : '',
-            countryId : '',
-            stateId : '',
-            cityId: '',
+            country : '1',
+            state : 'Tamil Nadu',
+            city : 'Chennai',
+            countryId : '1',
+            stateId : '1',
+            cityId: '1',
             address : '',
             colorArray : ['','#dd0908','#ff9e29','#3fb7d2','#dd0908','#c119ce', '#1963ce','#7fbad8', '#df8012', '#dd0908', '#070c1f', '#f49ecf', '#1ca39d'],
             errorsJson: {
@@ -141,10 +142,19 @@ export default class AdPostPageOne extends Component {
                 // let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
                 var avatarSourceArray = this.state.avatarSourceArray;
+                var avatarSourcePostArray = this.state.avatarSourcePostArray;
                 avatarSourceArray.push(source);
+                avatarSourcePostArray.push({
+                    uri: response.uri,
+                    type : response.type,
+                    name : response.fileName
+                });
+
+
                 this.setState({
                     avatarSource: source,
-                    avatarSourceArray : avatarSourceArray
+                    avatarSourceArray : avatarSourceArray,
+                    avatarSourcePostArray : avatarSourcePostArray
                 });
             }
         });
@@ -152,9 +162,12 @@ export default class AdPostPageOne extends Component {
 
     removeImage(key){
         var avatarSourceArray = this.state.avatarSourceArray;
+        var avatarSourcePostArray = this.state.avatarSourcePostArray;
         avatarSourceArray.splice(key, 1);
+        avatarSourcePostArray.splice(key, 1);
         this.setState({
-            avatarSourceArray : avatarSourceArray
+            avatarSourceArray : avatarSourceArray,
+            avatarSourcePostArray : avatarSourcePostArray
         });
     }
 
@@ -347,11 +360,45 @@ export default class AdPostPageOne extends Component {
                 errorsJson[key] = null;
             }
         });
+        alert(JSON.stringify(errorsJson))
         await that.updateMyState(errorsJson, 'errorsJson');
         if(isValid == 1){
-            alert("success");
+            var mobileNumber = await AsyncStorage.getItem('username');
+            var userId = await AsyncStorage.getItem('userid');
+            var userCode = await AsyncStorage.getItem('userCode');
+
+            var subUrl = "createBackendAdPost";
+
+            var postJson = new FormData();
+            for(var i=0; i<that.state.avatarSourcePostArray.length; i++){
+                postJson.append('fileselect[]', that.state.avatarSourcePostArray[i])
+            }
+            postJson.append('fileSubmit','Post');
+            postJson.append('adsTitle',that.state.adsTitle);
+            postJson.append('description',that.state.adsDescription);
+            postJson.append('noOfDaysToActive',that.state.noOfDaysToActive);
+            postJson.append('startDate',that.state.startDate);
+            postJson.append('categoryId',that.state.categoryId);
+            postJson.append('subCategoryId',that.state.subCategoryId);
+            postJson.append('itemId', "");
+            postJson.append('stateId',that.state.stateId);
+            postJson.append('cityId',that.state.cityId);
+            postJson.append('latitude','');
+            postJson.append('longitude','');
+            postJson.append('countryId','1');
+            postJson.append('actualPrice',that.state.cityId);
+            postJson.append('offerPrice','1');
+            postJson.append('address','1/96 chennai');
+            postJson.append('mobileNumber', mobileNumber);
+            postJson.append('userId', userId);
+            postJson.append('userCode', userCode);
+
+            postJson.append('rf', "json");
+
+            var response = await doPost(subUrl, postJson);
+            alert(JSON.stringify(response));
+
             /*
-             var postJson = new FormData();
              postJson.append("username", that.state.inputMobileNumber);
              postJson.append("password", that.state.inputPassword);
              var subUrl = "getLoginFromApps";

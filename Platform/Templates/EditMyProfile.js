@@ -1,7 +1,7 @@
 'use strict';
 import React, {Component, PropTypes} from "react";
 import {View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage, Image} from "react-native";
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { Container, Navbar } from 'navbar-native';
 import CommonStyle from "../Styles/CommonStyle";
 import MKButton from "../Component/MKButton";
@@ -29,14 +29,18 @@ export default class EditMyProfile extends Component {
                 emailId : null,
                 name : null
             },
-            address : 'ffgghh fdgsdh',
-            districtId : '1',
-            stateId : '1',
-            emailId : 'rr@fff.in',
-            name : 'rrr',
-            userid : '1',
+            address : '',
+            districtId : '',
+            stateId : '',
+            emailId : '',
+            name : '',
+            userid : '',
             userImagePath : '',
-            avatarSource : null
+            avatarSource : null,
+            avatarSourceUri : null,
+            avatarSourceName : null,
+            avatarSourceFileType : null
+
         };
         this.navigate=this.props.navigateTo;
     }
@@ -47,6 +51,23 @@ export default class EditMyProfile extends Component {
         this.setState({
             userid : userid
         });
+
+        var postJson = new FormData();
+        postJson.append("userid", userid);
+        postJson.append("rf", "json");
+        var subUrl="getUserDetailsFromApps";
+        var response = await doPost(subUrl, postJson);
+        if(response != null && response != "" && response != undefined){
+            this.setState({
+                address : response.address,
+                districtId : response.districtId,
+                stateId : response.stateId,
+                emailId : response.email,
+                name : response.name
+            });
+        }
+
+
         MessageBarManager.registerMessageBar(this.refs.alert);
     }
 
@@ -107,11 +128,15 @@ export default class EditMyProfile extends Component {
             postJson.append("districtId", that.state.districtId);
             postJson.append("address", that.state.address);
             postJson.append("userid", that.state.userid);
+            postJson.append('userFile', {
+                uri: this.state.avatarSourceUri,
+                type: this.state.avatarSourceFileType, // or photo.type
+                name: this.state.avatarSourceName
+            })
             postJson.append("rf", "json");
             var subUrl="updateMyProfile";
             var response = await doPost(subUrl, postJson);
             if(response != null && response != "" && response != undefined){
-                alert(JSON.stringify(response))
                 var status = response.status;
                 var message = response.message;
                 var alertType = "";
@@ -177,9 +202,18 @@ export default class EditMyProfile extends Component {
                 // let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
                 this.setState({
-                    avatarSource: source
+                    avatarSource: source,
+                    avatarSourceUri: response.uri,
+                    avatarSourceName: response.fileName,
+                    avatarSourceFileType : response.type
                 });
             }
+        });
+    }
+
+    removeImage(){
+        this.setState({
+            avatarSource : null
         });
     }
 
@@ -189,7 +223,7 @@ export default class EditMyProfile extends Component {
         var inputHeight = 38;
         var inputFontSize = 16;
         var inputHighlightColor = "#00BCD4";
-
+        var that = this;
         var inputNameError = null;
         if(this.state.errorsJson.name != null){
             inputNameError = <Text style={CommonStyle.errorText}>{this.state.errorsJson.name}</Text>;
@@ -281,13 +315,32 @@ export default class EditMyProfile extends Component {
                                      onFocus={()=>this.onFocus()}
                             />
                         { inputaddressError }
+                        <View style={{paddingTop: 30}}></View>
 
-                        <View>
+                        <View style={{flexDirection: 'row', padding: 5}}>
+
                             <TouchableOpacity onPress={()=> this.pickProfileImage()}>
-                                <View style={{marginTop: 30, width: 120, height:120, borderWidth : 0.5, borderColor: "#16a085", justifyContent : 'center', flex : 1}}>
-                                    { this.state.avatarSource !== null ? <Image source={this.state.avatarSource} style={{width: 120, height: 120}}/> : <Text style={{alignSelf: 'center', width:120, height:120}}>Choose Image...</Text> }
+                                <View
+                                    style={{ width: 150, padding: 10, height : 50, borderRadius : 10, borderWidth: 1,  marginTop:5, marginBottom:10, borderColor: '#59C2AF', justifyContent : 'center', flexDirection: "row"}}>
+                                    <Icon name='camera' color='#59C2AF' size={25}/>
+                                    <Text style={{textAlign:"center", padding : 3, color : "#59C2AF"}}> Select a photo</Text>
                                 </View>
                             </TouchableOpacity>
+                            {
+                                this.state.avatarSource != null ?
+                                    <View
+                                        style={{ width: this.state.width - 190, height : 120, margin:5, borderRadius : 10, borderWidth: 1, borderColor: '#59C2AF'}}>
+                                        <View>
+                                            <Image source={this.state.avatarSource }
+                                                   style={{width : this.state.width - 190, height : 120, borderRadius : 10}}/>
+                                            <Icon name='times-circle' color='red' size={30}
+                                                  style={{position : "absolute", top: 5, right : 5}}
+                                                  onPress={()=> that.removeImage()}/>
+                                        </View>
+
+                                    </View> : null
+                            }
+
                         </View>
 
                         <View style={{paddingTop: 30}}></View>

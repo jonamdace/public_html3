@@ -25,13 +25,41 @@ export default class MyProfile extends Component {
                 inputPassword : null,
                 inputRePassword : null
             },
-            inputRePassword : '',
-            inputPassword : ''
+            mobileNumber : '',
+            address : '',
+            districtId : '',
+            stateId : '',
+            emailId : '',
+            name : '',
+            userid : '',
+            userCode : '',
+            userImage : '',
         };
         this.navigate=this.props.navigateTo;
     }
 
-    componentDidMount() {
+   async componentDidMount() {
+
+       var userid = await AsyncStorage.getItem('userid');
+
+       var postJson = new FormData();
+        postJson.append("userid", userid);
+        postJson.append("rf", "json");
+        var subUrl="getUserDetailsFromApps";
+        var response = await doPost(subUrl, postJson);
+       if(response != null && response != "" && response != undefined){
+
+           this.setState({
+               userCode : response.userCode,
+               userImage : response.img,
+               mobileNumber : response.mobile,
+               address : response.address,
+               districtId : response.districtId,
+               stateId : response.stateId,
+               emailId : response.email,
+               name : response.name
+           });
+       }
     }
 
     componentWillUnmount() {
@@ -74,8 +102,13 @@ export default class MyProfile extends Component {
         var inputFontSize = 16;
         var inputHighlightColor = "#00BCD4";
 
-        var filePath = ConfigVariable.uploadedAdsFilePathEmpty;
-        var imgContent = <Image source={noimage} style={{width: 200, height: 200, resizeMode: Image.resizeMode.contain, alignSelf:'center', justifyContent :'center', borderRadius:90}} ></Image>;
+        var filePath = ConfigVariable.uploadedUserProfileFilePath;
+        var srcImg = noimage;
+        var userImage = this.state.userImage;
+        if(userImage !="" && userImage!=null){
+            srcImg = { uri : filePath + this.state.userCode+'/'+ userImage }
+        }
+        var imgContent = <Image source={srcImg} style={{width: inputWidth, height: 200, resizeMode: Image.resizeMode.contain, alignSelf:'center', justifyContent :'center', borderRadius:90}} ></Image>;
         var username = this.state.username;
 
         var dynamicBtn = <MKButton onPress={()=> this.onPressRedirect("EditMyProfile")} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF',width: 100, height:50, borderRadius:5}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
@@ -88,7 +121,7 @@ export default class MyProfile extends Component {
 
                 <ScrollView >
                     <View style={{flex: 1, width:inputWidth, alignSelf:'center'}}>
-                        <View style={{justifyContent :'center', overflow:'hidden',width: inputWidth, height: 200, borderRadius:10, alignSelf:"center", marginTop: 15, marginBottom: 15, borderColor: "#59C2AF", borderWidth : 1}}>
+                        <View style={{justifyContent :'center', overflow:'hidden',width: inputWidth, height: 200, alignSelf:"center", marginTop: 15, marginBottom: 15}}>
                             {imgContent}
                         </View>
                         <View style={{flexDirection: 'row'}}>
@@ -100,11 +133,11 @@ export default class MyProfile extends Component {
                             </View>
                         </View>
 
-                        { this.renderRowData(inputWidth, "Mobile", "8344798628") }
-                        { this.renderRowData(inputWidth, "Email", "mathan@mynap.in") }
-                        { this.renderRowData(inputWidth, "State", "8344798628") }
-                        { this.renderRowData(inputWidth, "City", "8344798628") }
-                        { this.renderRowData(inputWidth, "Address", "ghjghjg hhhj g h hghjg hghjg hjgjh gghghj hghjghj hgjhg jhgh jhggjhghjg hhj gh hghjghj") }
+                        { this.renderRowData(inputWidth, "Mobile", this.state.mobileNumber) }
+                        { this.renderRowData(inputWidth, "Email",  this.state.emailId) }
+                        { this.renderRowData(inputWidth, "State",  this.state.stateId) }
+                        { this.renderRowData(inputWidth, "City",  this.state.districtId) }
+                        { this.renderRowData(inputWidth, "Address",  this.state.address) }
 
                         <View style={{paddingTop: 30}}></View>
                     </View>

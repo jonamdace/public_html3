@@ -152,7 +152,7 @@ export default class App extends Component {
 
 	render() {
 		//var initialRoutes = 'HomeScreen';
-		var initialRoutes = 'EditMyProfile';
+		var initialRoutes = 'AdPostPageOne';
 
 		const  loginStatus  = this.state.loginStatus;
     		return(
