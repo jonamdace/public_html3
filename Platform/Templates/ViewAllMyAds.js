@@ -117,7 +117,7 @@ export default class ViewAllMyAds extends Component {
         return <SearchAdsContent imgWidth={this.state.width-50}
                                  imgHeight={150}
                                  navigation={this.props.navigateTo}
-                                 postJson={item}/>;
+                                 postJson={item} fromPage="View All My Ads" />;
     }
 
     render() {

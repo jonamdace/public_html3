@@ -80,7 +80,7 @@ export default class Bookmarked extends Component {
         var that = this;
         var postJson = new FormData();
         postJson.append("page", that.state.page);
-        postJson.append("getListFromPage", "View All My Ads");
+        postJson.append("getListFromPage", "View My Bookmarked List");
         postJson.append("searchUserId", that.state.searchUserId);
         postJson.append("rf", "json");
         var subUrl = "searchAdsAjax";
@@ -117,7 +117,7 @@ export default class Bookmarked extends Component {
         return <SearchAdsContent imgWidth={this.state.width-50}
                                  imgHeight={150}
                                  navigation={this.props.navigateTo}
-                                 postJson={item}/>;
+                                 postJson={item} fromPage="View My Bookmarked List" dataLoading = {this.dataLoading}/>;
     }
 
     render() {
