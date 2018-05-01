@@ -17,7 +17,6 @@ import MKTextInput from "./Component/MKTextInput";
 
 import DrawerMenu from './Component/menu/DrawerMenu';
 import MyCustomizedNavBar from './Component/menu/MyCustomizedNavBar';
-import Menu from "./Component/menu/Menu";
 
 import Login from "./Templates/Login";
 import ForgotPassword from "./Templates/ForgotPassword";
@@ -30,7 +29,7 @@ import AdsView from "./Templates/AdsView";
 import SearchAdsContent from "./Templates/SearchAdsContent";
 import AdsGallery from "./Templates/AdsGallery";
 import AdPostPageOne from "./Templates/AdPostPageOne";
-import AdPostPageTwo from "./Templates/AdPostPageTwo";
+
 
 
 import ContactUs from "./Templates/ContactUs";
@@ -204,10 +203,6 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 						updateLoginStatus={this.updateLoginStatus} 
 						updateLoading={this.updateLoading} />
 			</Drawer>;
-
-		case 'AdPostPageTwo':
-			return <AdPostPageTwo navigator={navigator} {...route.passProps} 
-navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />;
 
 		case 'Signup':
 			return <View style={{ flex: 1 }}>

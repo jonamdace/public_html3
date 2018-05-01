@@ -64,10 +64,10 @@ export default class DrawerMenu extends Component {
         var {layoutHeight, layoutWidth } = Math.min(height, width) * 0.8;
         var userDispContent = [];
         var dataArray = [
-            {'routes': 'Dashboard', title: 'Home'},
-            {'routes': 'Login', title: 'Login'},
-            {'routes': 'Signup', title: 'Signup'},
-            {'routes': 'ContactUs', title: 'Contact Us'}
+            {'routes': 'Dashboard', title: 'Home', icon : 'home'},
+            {'routes': 'Login', title: 'Login', icon : 'sign-in'},
+            {'routes': 'Signup', title: 'Signup', icon : 'sign-out'},
+            {'routes': 'ContactUs', title: 'Contact Us', icon : 'envelope'}
         ];
 
         var filePath = ConfigVariable.uploadedAdsFilePathEmpty;
@@ -101,16 +101,16 @@ export default class DrawerMenu extends Component {
             );
 
             var dataArray = [
-                {'routes': 'Dashboard', title: 'Home'},
-                {'routes': 'AdPostPageOne', title: 'Ad Post'},
-                {'routes': 'ViewAllMyAds', title: 'View All My Ads'},
-                {'routes': 'nearByYouAds', title: 'Near By You Ads'},
-                {'routes': 'Bookmarked', title: 'View All My Bookmarked'},
-                {'routes': 'MyProfile', title: 'View My Profile'},
-                {'routes': 'ChangePassword', title: 'Change Password'},
-                {'routes': 'History', title: 'History'},
-                {'routes': 'Logout', title: 'Sign out'},
-                {'routes': 'ContactUs', title: 'Contact Us'},
+                {'routes': 'Dashboard', title: 'Home', icon : 'home'},
+                {'routes': 'AdPostPageOne', title: 'Ad Post', icon : 'adn'},
+                {'routes': 'ViewAllMyAds', title: 'My Ads', icon : 'list'},
+                {'routes': 'Bookmarked', title: 'Bookmark', icon : 'bookmark-o'},
+                {'routes': 'nearByYouAds', title: 'Near By You Ads', icon : 'th-list'},
+                {'routes': 'MyProfile', title: 'View My Profile', icon : 'user-circle-o'},
+                {'routes': 'ChangePassword', title: 'Change Password', icon : 'key'},
+                {'routes': 'History', title: 'History', icon : 'history'},
+                {'routes': 'Logout', title: 'Sign out', icon : 'sign-out'},
+                {'routes': 'ContactUs', title: 'Contact Us', icon : 'envelope'},
             ];
         } else {
             userDispContent.push(
@@ -130,13 +130,15 @@ export default class DrawerMenu extends Component {
         dataArray.map(function (obj, index) {
             var route = obj.routes;
             var title = obj.title;
+            var icon = obj.icon;
             if(route === "Logout"){
                 objArray.push(
                     <View key={index}
-                          style={{ borderBottomWidth : 0.5, paddingBottom: 15,paddingLeft: 15, paddingTop: 15, borderColor : '#16a085'}}>
+                          style={{ padding: 15, paddingTop: 15 }}>
                         <TouchableOpacity onPress={()=>that.onPressToLogout()}>
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={{fontWeight : 'bold', color : 'grey'}}>{title}</Text>
+                                <Icon name={icon} size={20} color={"#59C2AF"} style={{ paddingLeft :15, paddingRight :5, paddingTop: 2}}/>
+                                <Text style={{ fontWeight : 'bold', color : '#59C2AF', paddingLeft:5, paddingRight :15}}>{title}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -144,10 +146,11 @@ export default class DrawerMenu extends Component {
             } else {
                 objArray.push(
                     <View key={index}
-                          style={{ borderBottomWidth : 0.5, paddingBottom: 15,paddingLeft: 15, paddingTop: 15, borderColor : '#16a085'}}>
+                          style={{ padding: 15, paddingTop: 15 }}>
                         <TouchableOpacity onPress={()=>that.onPressToRedirect(route)}>
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={{fontWeight : 'bold', color : 'grey'}}>{title}</Text>
+                                <Icon name={icon} size={20} color={"#59C2AF"} style={{ paddingLeft :15, paddingRight :5}}/>
+                                <Text style={{ fontWeight : 'bold', color : '#59C2AF', paddingLeft:5, paddingRight :15, paddingTop: 2}}>{title}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -163,7 +166,7 @@ export default class DrawerMenu extends Component {
                     {userDispContent}
                 </View>
                 <ScrollView>
-                    <View style={{ height : this.state.height-180,backgroundColor : "#FFF", borderRightWidth: 0.5, borderRightColor:'#16a085'}}>
+                    <View style={{ minHeight : this.state.height-180,backgroundColor : "#e6e6e6", borderRightWidth: 0.5, borderRightColor:'#16a085'}}>
                     {objArray}
                     </View>
                 </ScrollView>

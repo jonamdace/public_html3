@@ -645,7 +645,7 @@ export default class AdPostPageOne extends Component {
 
         var displayLocationContent = null;
         if(that.state.lastPosition != null){
-            displayLocationContent = that.getCurrentLocationAsString();
+            //displayLocationContent = that.getCurrentLocationAsString();
         }
         return (
             <View style={[{height : this.state.height, flex: 1, width : layoutWidth}]}
