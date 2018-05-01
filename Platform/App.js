@@ -36,6 +36,7 @@ import ContactUs from "./Templates/ContactUs";
 import EditMyProfile from "./Templates/EditMyProfile";
 import MyProfile from "./Templates/MyProfile";
 import ViewAllMyAds from "./Templates/ViewAllMyAds";
+import NearByYouAds from "./Templates/NearByYouAds";
 import Bookmarked from "./Templates/Bookmarked";
 import ChangePassword from "./Templates/ChangePassword";
 
@@ -152,7 +153,7 @@ export default class App extends Component {
 
 	render() {
 		//var initialRoutes = 'HomeScreen';
-		var initialRoutes = 'Bookmarked';
+		var initialRoutes = 'NearByYouAds';
 
 		const  loginStatus  = this.state.loginStatus;
     		return(
@@ -298,6 +299,26 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 				>
 				<MyCustomizedNavBar title={"Bookmark"} />
 					<Bookmarked navigator={navigator}
+						{...route.passProps}
+						navigateTo={this.navigateTo}
+						updateLoginStatus={this.updateLoginStatus}
+						updateLoading={this.updateLoading} />
+			</Drawer>;
+
+		case 'NearByYouAds':
+			return <Drawer type="overlay" content={ <DrawerMenu navigate={this.navigateToMenu}
+				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
+				tapToClose={true}
+				openDrawerOffset={0.2} // 20% gap on the right side of drawer
+				panCloseMask={0.2}
+				closedDrawerOffset={0}
+				styles={drawerStyles}
+				tweenHandler={(ratio) => ({
+					main: { opacity:(2-ratio)/2 }
+				})}
+				>
+				<MyCustomizedNavBar title={"Near By You Ads"} />
+					<NearByYouAds navigator={navigator}
 						{...route.passProps}
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
