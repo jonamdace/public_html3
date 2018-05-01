@@ -36,6 +36,7 @@ import ContactUs from "./Templates/ContactUs";
 import EditMyProfile from "./Templates/EditMyProfile";
 import MyProfile from "./Templates/MyProfile";
 import ViewAllMyAds from "./Templates/ViewAllMyAds";
+import Bookmarked from "./Templates/Bookmarked";
 import ChangePassword from "./Templates/ChangePassword";
 
 
@@ -151,7 +152,7 @@ export default class App extends Component {
 
 	render() {
 		//var initialRoutes = 'HomeScreen';
-		var initialRoutes = 'AdPostPageOne';
+		var initialRoutes = 'Bookmarked';
 
 		const  loginStatus  = this.state.loginStatus;
     		return(
@@ -176,7 +177,7 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 					main: { opacity:(2-ratio)/2 }
 				})}
 				>                          
-				<MyCustomizedNavBar title={"Apps Form Entry"} />
+				<MyCustomizedNavBar title={"Post your ads"} />
 					<AdPostPageOne navigator={navigator} 
 						{...route.passProps} 
 						navigateTo={this.navigateTo} 
@@ -196,7 +197,7 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 					main: { opacity:(2-ratio)/2 }
 				})}
 				>                          
-				<MyCustomizedNavBar title={"Category"} />
+				<MyCustomizedNavBar title={"Home"} />
 				<Dashboard navigator={navigator}
 						{...route.passProps} 
 						navigateTo={this.navigateTo} 
@@ -277,6 +278,26 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 				>
 				<MyCustomizedNavBar title={"View All My Ads"} />
 					<ViewAllMyAds navigator={navigator}
+						{...route.passProps}
+						navigateTo={this.navigateTo}
+						updateLoginStatus={this.updateLoginStatus}
+						updateLoading={this.updateLoading} />
+			</Drawer>;
+
+		case 'Bookmarked':
+			return <Drawer type="overlay" content={ <DrawerMenu navigate={this.navigateToMenu}
+				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
+				tapToClose={true}
+				openDrawerOffset={0.2} // 20% gap on the right side of drawer
+				panCloseMask={0.2}
+				closedDrawerOffset={0}
+				styles={drawerStyles}
+				tweenHandler={(ratio) => ({
+					main: { opacity:(2-ratio)/2 }
+				})}
+				>
+				<MyCustomizedNavBar title={"Bookmark"} />
+					<Bookmarked navigator={navigator}
 						{...route.passProps}
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}

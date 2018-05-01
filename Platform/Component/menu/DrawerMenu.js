@@ -102,7 +102,7 @@ export default class DrawerMenu extends Component {
 
             var dataArray = [
                 {'routes': 'Dashboard', title: 'Home', icon : 'home'},
-                {'routes': 'AdPostPageOne', title: 'Ad Post', icon : 'adn'},
+                {'routes': 'AdPostPageOne', title: 'Post Your Ads', icon : 'adn'},
                 {'routes': 'ViewAllMyAds', title: 'My Ads', icon : 'list'},
                 {'routes': 'Bookmarked', title: 'Bookmark', icon : 'bookmark-o'},
                 {'routes': 'nearByYouAds', title: 'Near By You Ads', icon : 'th-list'},
