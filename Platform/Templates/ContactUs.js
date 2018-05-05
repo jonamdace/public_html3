@@ -101,7 +101,6 @@ export default class ContactUs extends Component {
             var subUrl="sendContactUsDetails";
             var response = await doPost(subUrl, postJson);
             if(response != null && response != "" && response != undefined){
-                alert(JSON.stringify(response))
                 var status = response.status;
                 var message = response.message;
                 var alertType = "";
