@@ -220,9 +220,8 @@ export default class ContactUs extends Component {
                                      onChangeText={(description) => this.updateMyState(description, 'description')}
                                      value = {this.state.description}
                                      inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
-                                     returnKeyType={'next'} ref="description"
-                                     onSubmitEditing={(event) => this.focusNextField('description')}
-                                     onFocus={()=>this.onFocus()}
+                                     returnKeyType={'done'} ref="description"
+                                     onSubmitEditing={(event) => this.sendContactUs()}
                             />
                         { inputDescriptionError }
 

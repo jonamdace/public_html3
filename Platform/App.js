@@ -153,7 +153,7 @@ export default class App extends Component {
 
 	render() {
 		//var initialRoutes = 'HomeScreen';
-		var initialRoutes = 'NearByYouAds';
+		var initialRoutes = 'ContactUs';
 
 		const  loginStatus  = this.state.loginStatus;
     		return(
