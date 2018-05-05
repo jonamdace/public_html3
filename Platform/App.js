@@ -34,6 +34,7 @@ import AdPostPageOne from "./Templates/AdPostPageOne";
 
 import ContactUs from "./Templates/ContactUs";
 import EditMyProfile from "./Templates/EditMyProfile";
+import ViewHistory from "./Templates/ViewHistory";
 import MyProfile from "./Templates/MyProfile";
 import ViewAllMyAds from "./Templates/ViewAllMyAds";
 import NearByYouAds from "./Templates/NearByYouAds";
@@ -153,7 +154,7 @@ export default class App extends Component {
 
 	render() {
 		//var initialRoutes = 'HomeScreen';
-		var initialRoutes = 'ContactUs';
+		var initialRoutes = 'ViewHistory';
 
 		const  loginStatus  = this.state.loginStatus;
     		return(
@@ -348,6 +349,11 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 		case 'EditMyProfile':
 			return <View style={{ flex: 1 }}>
 						<EditMyProfile navigator={navigator} {...route.passProps} navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
+					</View>;
+
+		case 'ViewHistory':
+			return <View style={{ flex: 1 }}>
+						<ViewHistory navigator={navigator} {...route.passProps} navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
 					</View>;
 
 		case 'ContactUs':

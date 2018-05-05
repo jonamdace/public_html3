@@ -93,7 +93,7 @@ export default class EditMyProfile extends Component {
         this.refs[nextField].focus();
     }
 
-    async sendContactUs(){
+    async updateMyProfile(){
         var that = this;
         var isValid = 1;
         var stateArray = that.state;
@@ -119,8 +119,7 @@ export default class EditMyProfile extends Component {
         });
         await that.updateMyState(errorsJson, 'errorsJson');
         if(isValid == 1){
-            //this.setState({isLoading : true});
-            //this.setState({isLoading : false});
+            that.setState({isLoading : true});
             var postJson = new FormData();
             postJson.append("name", that.state.name);
             postJson.append("email", that.state.emailId);
@@ -155,6 +154,7 @@ export default class EditMyProfile extends Component {
                     position: 'bottom',
                 });
             }
+            that.setState({isLoading : false});
         }
     }
 
@@ -249,7 +249,7 @@ export default class EditMyProfile extends Component {
             inputaddressError = <Text style={CommonStyle.errorText}>{this.state.errorsJson.address}</Text>;
         }
 
-        var dynamicBtn = <MKButton onPress={()=> this.sendContactUs()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+        var dynamicBtn = <MKButton onPress={()=> this.updateMyProfile()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
             Submit
         </MKButton>;
         return (
