@@ -351,11 +351,6 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						<EditMyProfile navigator={navigator} {...route.passProps} navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
 					</View>;
 
-		case 'ViewHistory':
-			return <View style={{ flex: 1 }}>
-						<ViewHistory navigator={navigator} {...route.passProps} navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
-					</View>;
-
 		case 'ContactUs':
 			return <Drawer type="overlay" content={ <DrawerMenu navigate={this.navigateToMenu}
 				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
@@ -370,6 +365,26 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 				>
 				<MyCustomizedNavBar title={"Contact Us"} />
 					<ContactUs navigator={navigator}
+						{...route.passProps}
+						navigateTo={this.navigateTo}
+						updateLoginStatus={this.updateLoginStatus}
+						updateLoading={this.updateLoading} />
+			</Drawer>;
+
+		case 'ViewHistory':
+			return <Drawer type="overlay" content={ <DrawerMenu navigate={this.navigateToMenu}
+				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
+				tapToClose={true}
+				openDrawerOffset={0.2} // 20% gap on the right side of drawer
+				panCloseMask={0.2}
+				closedDrawerOffset={0}
+				styles={drawerStyles}
+				tweenHandler={(ratio) => ({
+					main: { opacity:(2-ratio)/2 }
+				})}
+				>
+				<MyCustomizedNavBar title={"History"} />
+					<ViewHistory navigator={navigator}
 						{...route.passProps}
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
