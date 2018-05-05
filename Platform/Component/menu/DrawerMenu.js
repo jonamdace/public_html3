@@ -109,8 +109,8 @@ export default class DrawerMenu extends Component {
                 {'routes': 'MyProfile', title: 'View My Profile', icon : 'user-circle-o'},
                 {'routes': 'ChangePassword', title: 'Change Password', icon : 'key'},
                 {'routes': 'History', title: 'History', icon : 'history'},
-                {'routes': 'Logout', title: 'Sign out', icon : 'sign-out'},
                 {'routes': 'ContactUs', title: 'Contact Us', icon : 'envelope'},
+                {'routes': 'Logout', title: 'Sign out', icon : 'sign-out'},
             ];
         } else {
             userDispContent.push(
@@ -166,7 +166,7 @@ export default class DrawerMenu extends Component {
                     {userDispContent}
                 </View>
                 <ScrollView>
-                    <View style={{ minHeight : this.state.height-180,backgroundColor : "#e6e6e6", borderRightWidth: 0.5, borderRightColor:'#16a085'}}>
+                    <View style={{ minHeight : this.state.height-180,backgroundColor : "#e6e6e6", borderRightWidth: 0.5, borderRightColor:'#e6e6e6'}}>
                     {objArray}
                     </View>
                 </ScrollView>

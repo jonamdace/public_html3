@@ -87,7 +87,7 @@ export default class ChangePassword extends Component {
             postJson.append("userid", userid);
 
             var subUrl = "updatePassword";
-           // that.setState({isLoading : true});
+            that.setState({isLoading : true});
             var response = await doPost(subUrl, postJson);
             if(response != null && response != "" && response != undefined){
                 var status = response.status;
@@ -114,6 +114,7 @@ export default class ChangePassword extends Component {
                 });
 
             }
+            that.setState({isLoading : false});
         }
     }
 
