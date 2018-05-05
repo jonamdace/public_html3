@@ -99,6 +99,7 @@ export default class ContactUs extends Component {
             postJson.append("description", that.state.description);
             postJson.append("rf", "json");
             var subUrl="sendContactUsDetails";
+            that.setState({isLoading : true});
             var response = await doPost(subUrl, postJson);
             if(response != null && response != "" && response != undefined){
                 var status = response.status;
@@ -119,6 +120,7 @@ export default class ContactUs extends Component {
                     position: 'bottom',
                 });
             }
+            that.setState({isLoading : false});
         }
     }
 
