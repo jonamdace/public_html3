@@ -17,7 +17,7 @@ export default class ViewHistory extends Component {
             isCancelable: true,
             height: height,
             width: width,
-            page : '',
+            page : '0',
             left_rec : '',
             rec_limit : '',
             historyArray : [],
@@ -28,7 +28,7 @@ export default class ViewHistory extends Component {
     }
 
     async componentDidMount() {
-        this.loadsearchData("");
+        this.loadsearchData("0");
     }
 
 
@@ -98,25 +98,31 @@ export default class ViewHistory extends Component {
     }
 
     render() {
+        var previousPage = 0;
+        var nextPage = 0;
         var layoutWidth = this.state.width - 30;
         var page = this.state.page;
-        var previousPage = page - 1;
-        var nextPage =  page + 1;
+        if(page != ""){
+            page = parseInt(page);
+            previousPage = page - 1;
+            nextPage =  page + 1;
+        }
+
         var left_rec = this.state.left_rec;
         var rec_limit = this.state.rec_limit;
 
         var btnPrevious = null;
         var btnNext = null;
-        if(previousPage>=0){
-            btnPrevious = <MKButton onPress={()=> this.loadsearchData(previousPage)} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
-                Previous { rec_limit }
+        if(previousPage> 0){
+            btnPrevious = <MKButton onPress={()=> this.loadsearchData(previousPage)} style={{backgroundColor : 'orange', borderColor: 'orange', height:60, margin: 10}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+                <Icon name={"arrow-circle-o-left"} color={"#FFF"} size={25} /> Previous
             </MKButton>;
                 //'&nbsp;<a href="javascript:void(0)" onclick="loadsearchData('.$previousPage.')" class="btn btn-danger btn-sm"><span class="fa fa-arrow-left text-white fa-1x"></span>&nbsp;Previous '.$rec_limit.'</a>';
         }
 
         if(left_rec>0){
-            btnNext = <MKButton onPress={()=> this.loadsearchData(nextPage)} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
-                Next { rec_limit }
+            btnNext = <MKButton onPress={()=> this.loadsearchData(nextPage)} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60, margin: 10}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+                Next <Icon name={"arrow-circle-o-right"} color={"#FFF"} size={25} />
             </MKButton>;
         }
 
@@ -129,10 +135,13 @@ export default class ViewHistory extends Component {
                         <ListView dataSource={this.state.listItems}
                                   renderRow={(item) => this.renderRow(item)}
                                   enableEmptySections={true}/>
-                        <View>{btnPrevious}</View>
-                        <View>{btnNext}</View>
+                        <View style={{flexDirection : 'row', paddingBottom : 10}}>
+                            <View style={{ width : 120}}>{btnPrevious}</View>
+                            <View style={{ width : 120}}>{btnNext}</View>
+                        </View>
                     </View>
-                </ScrollView >
+                </ScrollView>
+                <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
             </View>);
     }
 
