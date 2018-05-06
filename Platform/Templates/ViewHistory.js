@@ -34,7 +34,7 @@ export default class ViewHistory extends Component {
 
     renderRow(item) {
         if(item != undefined){
-            return <View style={{paddingBottom: 20}}>
+            return <View style={{padding: 5, margin: 5, backgroundColor: '#E9E5BE'}}>
                 <View style={{flexDirection : 'row', padding:5}}>
                     <View style={{width : 110 }}><Text style={{fontSize : 14, fontWeight:'bold' }}>Date</Text></View>
                     <View><Text>: {item.createdAt}</Text></View>
@@ -114,15 +114,15 @@ export default class ViewHistory extends Component {
         var btnPrevious = null;
         var btnNext = null;
         if(previousPage> 0){
-            btnPrevious = <MKButton onPress={()=> this.loadsearchData(previousPage)} style={{backgroundColor : 'orange', borderColor: 'orange', height:60, margin: 10}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
-                <Icon name={"arrow-circle-o-left"} color={"#FFF"} size={25} /> Previous
+            btnPrevious = <MKButton onPress={()=> this.loadsearchData(previousPage)} style={{backgroundColor : 'orange', borderColor: 'orange', height:50, width:50}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+                <Icon name={"arrow-circle-o-left"} color={"#FFF"} size={25} />
             </MKButton>;
                 //'&nbsp;<a href="javascript:void(0)" onclick="loadsearchData('.$previousPage.')" class="btn btn-danger btn-sm"><span class="fa fa-arrow-left text-white fa-1x"></span>&nbsp;Previous '.$rec_limit.'</a>';
         }
 
         if(left_rec>0){
-            btnNext = <MKButton onPress={()=> this.loadsearchData(nextPage)} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60, margin: 10}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
-                Next <Icon name={"arrow-circle-o-right"} color={"#FFF"} size={25} />
+            btnNext = <MKButton onPress={()=> this.loadsearchData(nextPage)} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:50, width:50}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+                <Icon name={"arrow-circle-o-right"} color={"#FFF"} size={25} />
             </MKButton>;
         }
 
@@ -131,16 +131,17 @@ export default class ViewHistory extends Component {
             <View style={[{height : this.state.height, flex: 1, width : this.state.width}]}
                   onLayout={()=> this.updateLayout()}>
                 <ScrollView >
-                    <View style={{flex: 1,padding:10, alignSelf:'center'}}>
+                    <View style={{flex: 1,padding:5, alignSelf:'center'}}>
                         <ListView dataSource={this.state.listItems}
                                   renderRow={(item) => this.renderRow(item)}
                                   enableEmptySections={true}/>
-                        <View style={{flexDirection : 'row', paddingBottom : 10}}>
-                            <View style={{ width : 120}}>{btnPrevious}</View>
-                            <View style={{ width : 120}}>{btnNext}</View>
-                        </View>
                     </View>
                 </ScrollView>
+                <View style={{padding : 20}}></View>
+                <View style={{flexDirection : 'row', paddingBottom : 10, right: 0, top: this.state.height - 160, position: 'absolute'}}>
+                    <View style={{ width : 60}}>{btnPrevious}</View>
+                    <View style={{ width : 60}}>{btnNext}</View>
+                </View>
                 <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
             </View>);
     }
