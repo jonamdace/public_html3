@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component, PropTypes} from "react";
-import {View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage} from "react-native";
+import {Picker, View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage} from "react-native";
 
 import { Container, Navbar } from 'navbar-native';
 import CommonStyle from "../Styles/CommonStyle";
@@ -8,6 +8,8 @@ import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
 import { doPost } from "../Component/MKActions";
 import MKSpinner from "../Component/MKSpinner";
+import PickerModal from 'react-native-picker-modal';
+
 var MessageBarAlert = require('react-native-message-bar').MessageBar;
 var MessageBarManager = require('react-native-message-bar').MessageBarManager;
 
@@ -32,13 +34,27 @@ export default class ContactUs extends Component {
             categoryId : '',
             mobileNumber : '',
             emailId : '',
-            name : ''
+            name : '',
+            categoryList : []
         };
         this.navigate=this.props.navigateTo;
     }
 
+
+    async getCategoryList(){
+        var subUrl="getCategoryListFromApps";
+        var postJson = new FormData();
+        var response = await doPost(subUrl, null);
+        if(response != null && response != "" && response != undefined){
+            this.setState({
+                categoryList : response
+            });
+        }
+    }
+
     componentDidMount() {
         MessageBarManager.registerMessageBar(this.refs.alert);
+        this.getCategoryList();
     }
 
     componentWillUnmount() {
@@ -171,6 +187,19 @@ export default class ContactUs extends Component {
         var dynamicBtn = <MKButton onPress={()=> this.sendContactUs()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
             Submit
         </MKButton>;
+
+
+
+        var pickerItem = [];
+
+        var categoryList = this.state.categoryList;
+        Object.keys(categoryList).forEach(function(index){
+            var categoryId = categoryList[index].categoryId;
+            var category = categoryList[index].category;
+            pickerItem.push(
+                <Picker.Item label={category} value={categoryId} key={index} />
+            );
+        });
         return (
             <View style={[{height : this.state.height, flex: 1, width : layoutWidth,  backgroundColor:'#FFF'}]} onLayout={()=> this.updateLayout()}>
 
@@ -202,30 +231,27 @@ export default class ContactUs extends Component {
                                      value = {this.state.mobileNumber}
                                      inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
                                      keyboardType={'numeric'} maxLength={10} returnKeyType={'next'} ref="mobileNumber"
-                                     onSubmitEditing={(event) => this.focusNextField('categoryId')}
-                                     onFocus={()=>this.onFocus()}
-                            />
-                        { inputMobileNumberError }
-
-                        <MKTextInput label={'Category'} highlightColor={inputHighlightColor}
-                                     onChangeText={(categoryId) => this.updateMyState(categoryId, 'categoryId')}
-                                     value = {this.state.categoryId}
-                                     inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
-                                     returnKeyType={'next'} ref="categoryId"
                                      onSubmitEditing={(event) => this.focusNextField('description')}
                                      onFocus={()=>this.onFocus()}
                             />
-                        { inputCategoryIdError }
+                        { inputMobileNumberError }
 
                         <MKTextInput label={'Description'} highlightColor={inputHighlightColor}
                                      onChangeText={(description) => this.updateMyState(description, 'description')}
                                      value = {this.state.description}
                                      inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
                                      returnKeyType={'done'} ref="description"
-                                     onSubmitEditing={(event) => this.sendContactUs()}
                             />
                         { inputDescriptionError }
 
+                        <View style={{paddingTop : 25}}>
+                            <PickerModal
+                                selectedValue={this.state.categoryId}
+                                onValueChange={(itemValue, itemIndex) => this.updateMyState(itemValue, 'categoryId')}>
+                                {pickerItem}
+                            </PickerModal>
+                            { inputCategoryIdError }
+                        </View>
 
                         <View style={{paddingTop: 30}}></View>
                     </View>
