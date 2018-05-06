@@ -360,7 +360,7 @@ export default class AdPostPageOne extends Component {
                 errorsJson[key] = null;
             }
         });
-        alert(JSON.stringify(errorsJson))
+
         await that.updateMyState(errorsJson, 'errorsJson');
         if(isValid == 1){
             var mobileNumber = await AsyncStorage.getItem('username');
@@ -394,20 +394,32 @@ export default class AdPostPageOne extends Component {
             postJson.append('userCode', userCode);
 
             postJson.append('rf', "json");
+            that.setState({isLoading : true});
 
             var response = await doPost(subUrl, postJson);
-            alert(JSON.stringify(response));
 
-            /*
-             postJson.append("username", that.state.inputMobileNumber);
-             postJson.append("password", that.state.inputPassword);
-             var subUrl = "getLoginFromApps";
-             that.setState({isLoading : true});
-             var response = await doPost(subUrl, postJson);
-             if(response != null){
+            if(response != null && response != "" && response != undefined){
+                var status = response.status;
+                var message = response.message;
+                var alertType = "";
+                var title = "";
+                if(status == 1){
+                    alertType = 'success';
+                    title = "Success!";
+                } else {
+                    title = "Error";
+                    alertType = 'error';
+                }
+                MessageBarManager.showAlert({
+                    title: title,
+                    message: message,
+                    alertType: alertType,
+                    position: 'bottom',
+                });
 
-             }
-             */
+            }
+            that.setState({isLoading : false});
+
         }
 
     }

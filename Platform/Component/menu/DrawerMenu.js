@@ -108,7 +108,7 @@ export default class DrawerMenu extends Component {
                 {'routes': 'nearByYouAds', title: 'Near By You Ads', icon : 'th-list'},
                 {'routes': 'MyProfile', title: 'View My Profile', icon : 'user-circle-o'},
                 {'routes': 'ChangePassword', title: 'Change Password', icon : 'key'},
-                {'routes': 'History', title: 'History', icon : 'history'},
+                {'routes': 'ViewHistory', title: 'History', icon : 'history'},
                 {'routes': 'ContactUs', title: 'Contact Us', icon : 'envelope'},
                 {'routes': 'Logout', title: 'Sign out', icon : 'sign-out'},
             ];
