@@ -113,7 +113,7 @@ export default class ViewHistory extends Component {
 
         var btnPrevious = null;
         var btnNext = null;
-        if(previousPage> 0){
+        if(previousPage>= 0){
             btnPrevious = <MKButton onPress={()=> this.loadsearchData(previousPage)} style={{backgroundColor : 'orange', borderColor: 'orange', height:50, width:50}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
                 <Icon name={"arrow-circle-o-left"} color={"#FFF"} size={25} />
             </MKButton>;
