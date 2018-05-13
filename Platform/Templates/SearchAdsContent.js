@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     StyleSheet,
     Platform,
-    Image
+    Image,
+    AsyncStorage
 } from "react-native";
 
 import MKSpinner from "../Component/MKSpinner";
@@ -21,7 +22,9 @@ export default class SearchAdsContent extends Component {
     constructor(props:Object) {
 
         super(props);
-        this.state = {};
+        this.state = {
+            bookmarkAdd :true
+        };
 
     }
 
@@ -30,18 +33,24 @@ export default class SearchAdsContent extends Component {
         //this.props.navigation.navigate('AdsView', postJson);
     }
 
-    async onPressToRemoveFromBookmark(){
-        alert(this.props.postJson.adsId);
+    async onPressToRemoveFromBookmark(action){
 
         var that = this;
+        var userid = await AsyncStorage.getItem('userid');
+
         var postJson = new FormData();
         postJson.append("adsId", this.props.postJson.adsId);
-        postJson.append("action", "remove");
+        postJson.append("action", action);
+        postJson.append("userid", userid);
         postJson.append("rf", "json");
         var subUrl = "addToMyBookmark";
         var response = await doPost(subUrl, postJson);
-
-
+        if(response != null && response != "" && response != undefined){
+            that.setState({
+                bookmarkAdd : !that.state.bookmarkAdd
+            })
+            alert(response.message);
+        }
     }
 
     render() {
@@ -67,13 +76,24 @@ export default class SearchAdsContent extends Component {
 
         var dynamicContent = null;
         if(this.props.fromPage != null  && this.props.fromPage == "View My Bookmarked List"){
-            dynamicContent =
-                <TouchableOpacity onPress={()=> this.onPressToRemoveFromBookmark()}>
-                    <Text
-                        style={[ {textAlign:'left', color:'orange'}]}>
-                        Remove from Bookmark
-                    </Text>
-                </TouchableOpacity>;
+
+            if(!this.state.bookmarkAdd){
+                dynamicContent =
+                    <TouchableOpacity onPress={()=> this.onPressToRemoveFromBookmark('add')}>
+                        <Text
+                            style={[ {textAlign:'left', color:'blue'}]}>
+                            Add to Bookmark
+                        </Text>
+                    </TouchableOpacity>;
+            } else {
+                dynamicContent =
+                    <TouchableOpacity onPress={()=> this.onPressToRemoveFromBookmark('remove')}>
+                        <Text
+                            style={[ {textAlign:'left', color:'orange'}]}>
+                            Remove from Bookmark
+                        </Text>
+                    </TouchableOpacity>;
+            }
         }
 
         return (
