@@ -9,6 +9,9 @@ import MKTextInput from "../Component/MKTextInput";
 import { doPost } from "../Component/MKActions";
 import MKSpinner from "../Component/MKSpinner";
 
+var MessageBarAlert = require('react-native-message-bar').MessageBar;
+var MessageBarManager = require('react-native-message-bar').MessageBarManager;
+
 export default class Login extends Component {
 
   	constructor(props: Object) {
@@ -48,7 +51,11 @@ export default class Login extends Component {
 	}
 
 	componentDidMount() {
+		MessageBarManager.registerMessageBar(this.refs.alert);
+	}
 
+	componentWillUnmount() {
+		MessageBarManager.unregisterMessageBar();
 	}
 
 	async getLogin(){
@@ -81,7 +88,13 @@ export default class Login extends Component {
 			var subUrl = "getLoginFromApps";
 			that.setState({isLoading : true});
 			var response = await doPost(subUrl, postJson);
-			if(response != null){				
+			if(response != null){
+
+				var status = "";
+				var message = "";
+				var alertType = "";
+				var title = "";
+
 				var active = response['active'];
 				if(active!=null && (active == "active" ||  active == "InActive")){
 					var userid = response['userid']; var userCode = response['userCode']; var name = response['name'];
@@ -93,21 +106,48 @@ export default class Login extends Component {
 					await AsyncStorage.setItem('username', that.state.inputMobileNumber);
 					await AsyncStorage.setItem('password', that.state.inputPassword);
 
-					setTimeout(function(){ 
-						that.setState({isLoading : false}); 
+					that.setState({isLoading : false});
+
+					alertType = 'success';
+					title = "Success!";
+					MessageBarManager.showAlert({
+						title: title,
+						message: "Successfully logged in!",
+						alertType: alertType,
+						position: 'bottom',
+					});
+
+					setTimeout(function(){
 						that.onPressRedirect("Dashboard");
 					}, 1000);
 				} else if(active == "InActive"){
-					setTimeout(function(){ 
-						that.setState({isLoading : false}); 
-						alert("Your Profile was not activated!");
-					}, 1000);
+					that.setState({isLoading : false});
+
+					alertType = 'error';
+					title = "Error!";
+					message="Your Profile was not activated!";
+					MessageBarManager.showAlert({
+						title: title,
+						message: message,
+						alertType: alertType,
+						position: 'bottom',
+					});
 				} else {
-					setTimeout(function(){ 
-						that.setState({isLoading : false}); 
-						alert("Username/Password is incorrect");
-					}, 1000);
+					that.setState({isLoading : false});
+
+					alertType = 'error';
+					title = "Error!";
+					message="Username/Password is incorrect";
+					MessageBarManager.showAlert({
+						title: title,
+						message: message,
+						alertType: alertType,
+						position: 'bottom',
+					});
 				}
+
+
+
 			}
 		}
 	}
@@ -189,6 +229,7 @@ export default class Login extends Component {
             <MKButton onPress={()=> this.getLogin()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} >
 				LOGIN
 			</MKButton>
+			<MessageBarAlert ref="alert" />
 		</View>
 		);
 	}

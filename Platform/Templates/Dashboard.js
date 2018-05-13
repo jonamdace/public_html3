@@ -55,7 +55,7 @@ export default class Dashboard extends Component {
 
 	async componentDidMount() {
 
-		ToastAndroid.show('Successfully logged in!', ToastAndroid.SHORT);
+		//ToastAndroid.show('Successfully logged in!', ToastAndroid.SHORT);
 
 		var that = this;
  		const categoryJson = await AsyncStorage.getItem('categoryJson');
