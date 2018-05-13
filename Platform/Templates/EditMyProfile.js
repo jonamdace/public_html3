@@ -1,6 +1,6 @@
 'use strict';
 import React, {Component, PropTypes} from "react";
-import {View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage, Image} from "react-native";
+import { Picker, View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage, Image} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Container, Navbar } from 'navbar-native';
 import CommonStyle from "../Styles/CommonStyle";
@@ -8,6 +8,8 @@ import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
 import { doPost } from "../Component/MKActions";
 import MKSpinner from "../Component/MKSpinner";
+import PickerModal from 'react-native-picker-modal';
+
 var MessageBarAlert = require('react-native-message-bar').MessageBar;
 var MessageBarManager = require('react-native-message-bar').MessageBarManager;
 var ImagePicker = require('react-native-image-picker');
@@ -39,7 +41,9 @@ export default class EditMyProfile extends Component {
             avatarSource : null,
             avatarSourceUri : null,
             avatarSourceName : null,
-            avatarSourceFileType : null
+            avatarSourceFileType : null,
+            stateItems: [],
+            cityItems: [],
 
         };
         this.navigate=this.props.navigateTo;
@@ -65,10 +69,45 @@ export default class EditMyProfile extends Component {
                 emailId : response.email,
                 name : response.name
             });
+
+            this.getCityList(response.stateId);
         }
+
+        this.getStateList();
 
 
         MessageBarManager.registerMessageBar(this.refs.alert);
+    }
+
+    async getStateList(){
+
+        var postJson = new FormData();
+        postJson.append("countryId", 1);
+        postJson.append("divId", "stateIdDiv");
+        postJson.append("rf", "json");
+        var subUrl="getStates";
+        var response = await doPost(subUrl, postJson);
+        if(response != null && response != "" && response != undefined){
+            this.setState({
+                stateItems : response
+            });
+        }
+    }
+
+    async getCityList(stateId){
+
+        var postJson = new FormData();
+        postJson.append("countryId", 1);
+        postJson.append("divId", "cityIdDiv");
+        postJson.append("actionId", stateId);
+        postJson.append("rf", "json");
+        var subUrl="getStates";
+        var response = await doPost(subUrl, postJson);
+        if(response != null && response != "" && response != undefined){
+            this.setState({
+                cityItems : response
+            });
+        }
     }
 
     componentWillUnmount() {
@@ -252,6 +291,36 @@ export default class EditMyProfile extends Component {
         var dynamicBtn = <MKButton onPress={()=> this.updateMyProfile()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
             Submit
         </MKButton>;
+
+
+        var pickerStateItem = [];
+        pickerStateItem.push(
+            <Picker.Item label={"Select State"} value="" key={0} />
+        );
+        var stateList = this.state.stateItems;
+
+        Object.keys(stateList).forEach(function(index){
+            var dynamicInputValue = stateList[index].stateId;
+            var state = stateList[index].state;
+            pickerStateItem.push(
+                <Picker.Item label={state} value={dynamicInputValue} key={index} />
+            );
+        });
+
+        var cityList = this.state.cityItems;
+        var pickerCityItem = [];
+        pickerCityItem.push(
+            <Picker.Item label={"Select City"} value="" key={0} />
+        );
+        Object.keys(cityList).forEach(function(index){
+            var dynamicInputValue = cityList[index].districtId;
+            var district = cityList[index].district;
+            pickerCityItem.push(
+                <Picker.Item label={district} value={dynamicInputValue} key={index} />
+            );
+        });
+
+
         return (
             <View style={[{height : this.state.height, flex: 1, width : layoutWidth,  backgroundColor:'#FFF'}]} onLayout={()=> this.updateLayout()}>
                 <Navbar
@@ -281,29 +350,30 @@ export default class EditMyProfile extends Component {
                                      value = {this.state.emailId}
                                      inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
                                      returnKeyType={'next'} ref="emailId"
-                                     onSubmitEditing={(event) => this.focusNextField('state')}
+                                     //onSubmitEditing={(event) => this.focusNextField('state')}
                                      onFocus={()=>this.onFocus()}
                             />
                         { inputEmailError }
 
-                        <MKTextInput label={'State'} highlightColor={inputHighlightColor}
-                                     onChangeText={(stateId) => this.updateMyState(stateId, 'stateId')}
-                                     value = {this.state.stateId}
-                                     inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
-                                     maxLength={10} returnKeyType={'next'} ref="stateId"
-                                     onSubmitEditing={(event) => this.focusNextField('districtId')}
-                                     onFocus={()=>this.onFocus()}
-                            />
+                        <View style={{paddingTop : 30}}></View>
+                        <PickerModal
+                            selectedValue={ this.state.stateId }
+                            onValueChange={
+                            (stateId, itemIndex) =>
+                                {
+                                    that.updateMyState(stateId, 'stateId');
+                                    that.getCityList(stateId);
+                                }
+                                }>
+                            {pickerStateItem}
+                        </PickerModal>
                         { inputstateError }
-
-                        <MKTextInput label={'City'} highlightColor={inputHighlightColor}
-                                     onChangeText={(districtId) => this.updateMyState(districtId, 'districtId')}
-                                     value = {this.state.districtId}
-                                     inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
-                                     returnKeyType={'next'} ref="districtId"
-                                     onSubmitEditing={(event) => this.focusNextField('address')}
-                                     onFocus={()=>this.onFocus()}
-                            />
+                        <View style={{paddingTop : 10}}></View>
+                        <PickerModal
+                            selectedValue={ this.state.districtId }
+                            onValueChange={(districtId, itemIndex) => that.updateMyState(districtId, 'districtId')}>
+                            {pickerCityItem}
+                        </PickerModal>
                         { inputdistrictIdError }
 
                         <MKTextInput label={'address'} highlightColor={inputHighlightColor}

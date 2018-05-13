@@ -153,8 +153,8 @@ export default class App extends Component {
 	// Common functions End
 
 	render() {
-		//var initialRoutes = 'HomeScreen';
-		var initialRoutes = 'AdPostPageOne';
+		var initialRoutes = 'HomeScreen';
+		//var initialRoutes = 'EditMyProfile';
 
 		const  loginStatus  = this.state.loginStatus;
     		return(
