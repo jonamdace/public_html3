@@ -334,7 +334,7 @@ export default class Login extends Component {
 				<View style={{paddingTop: 10}}></View>
 				<Text style={[CommonStyle.errorText, {textAlign : 'right', textDecorationLine: 'underline'}]} onPress={()=> this.confirmUserAndSendOtp()}>Re-Send OTP?</Text>
 			</View>;
-			dynamicBtn = <MKButton onPress={()=> this.verifyUserAndOtp()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+			dynamicBtn = <MKButton onPress={()=> this.verifyUserAndOtp()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} >
 				VERIFY OTP
 			</MKButton>;
 		}  else if(this.state.otpStatus == '2' ){
@@ -357,8 +357,8 @@ export default class Login extends Component {
 				<ScrollView >
 					{otpContent}
 				</ScrollView>
-				{dynamicBtn}
 				<MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
+				{dynamicBtn}
 				<MessageBarAlert ref="alert" />
 			</View>
 		);

@@ -181,10 +181,10 @@ export default class ChangePassword extends Component {
                         <View style={{paddingTop: 30}}></View>
                     </View>
                 </ScrollView>
-                <MKButton onPress={()=> this.changeMyPassword()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+                <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
+                <MKButton onPress={()=> this.changeMyPassword()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} >
                     Update
                 </MKButton>
-                <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
                 <MessageBarAlert ref="alert" />
             </View>
         );

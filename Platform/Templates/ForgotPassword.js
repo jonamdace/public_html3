@@ -271,7 +271,7 @@ export default class Login extends Component {
 		//Error Block Code end
 		var editableMobile = true;
 		var responseMsg =null;
-		var dynamicBtn = <MKButton onPress={()=> this.confirmUserAndSendOtp()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+		var dynamicBtn = <MKButton onPress={()=> this.confirmUserAndSendOtp()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'}>
 				SEND OTP
 			</MKButton>;
 		var otpContent = <View><MKTextInput label={'Mobile Number'} highlightColor={inputHighlightColor}
@@ -306,7 +306,7 @@ export default class Login extends Component {
 					<View style={{paddingTop: 10}}></View>
 					<Text style={[CommonStyle.errorText, {textAlign : 'right', textDecorationLine: 'underline'}]} onPress={()=> this.confirmUserAndSendOtp()}>Re-Send OTP?</Text>
 					</View>;
-			dynamicBtn = <MKButton onPress={()=> this.verifyUserAndOtp()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+			dynamicBtn = <MKButton onPress={()=> this.verifyUserAndOtp()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} >
 				VERIFY OTP
 			</MKButton>;
 
@@ -339,7 +339,7 @@ export default class Login extends Component {
 
 						<View style={{paddingTop: 10}}></View>
 					</View>;
-			dynamicBtn = <MKButton onPress={()=> this.setPassword()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+			dynamicBtn = <MKButton onPress={()=> this.setPassword()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} >
 				SET PASSWORD
 			</MKButton>;
 		}
@@ -367,11 +367,11 @@ export default class Login extends Component {
 					{responseMsg}
 				</View>
 			</ScrollView>
+			<MKSpinner visible={this.state.isLoading}
+					   cancelable={this.state.isCancelable}
+					   textStyle={{color: '#FFF'}}
+					   updateParentState={this.updateState.bind(this)}/>
 			{dynamicBtn}
-       			<MKSpinner visible={this.state.isLoading} 
-					cancelable={this.state.isCancelable} 
-					textStyle={{color: '#FFF'}} 
-					updateParentState={this.updateState.bind(this)}/>
 		</View>
 		);
 	}

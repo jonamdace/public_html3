@@ -416,8 +416,8 @@ export default class EditMyProfile extends Component {
                         <View style={{paddingTop: 30}}></View>
                     </View>
                 </ScrollView>
-                {dynamicBtn}
                 <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
+                {dynamicBtn}
                 <MessageBarAlert ref="alert" />
             </View>
         );

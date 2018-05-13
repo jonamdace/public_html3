@@ -745,8 +745,8 @@ export default class AdPostPageOne extends Component {
                     {dynamicFieldsData}
                     <View style={{paddingTop: 30}}></View>
                 </ScrollView>
-                {dynamicBtn}
                 <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}}/>
+                {dynamicBtn}
                 <MessageBarAlert ref="alert" />
             </View>
         );

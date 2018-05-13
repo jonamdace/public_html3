@@ -184,7 +184,7 @@ export default class ContactUs extends Component {
             inputDescriptionError = <Text style={CommonStyle.errorText}>{this.state.errorsJson.description}</Text>;
         }
 
-        var dynamicBtn = <MKButton onPress={()=> this.sendContactUs()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+        var dynamicBtn = <MKButton onPress={()=> this.sendContactUs()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} >
             Submit
         </MKButton>;
 
@@ -256,8 +256,8 @@ export default class ContactUs extends Component {
                         <View style={{paddingTop: 30}}></View>
                     </View>
                 </ScrollView>
-                {dynamicBtn}
                 <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
+                {dynamicBtn}
                 <MessageBarAlert ref="alert" />
             </View>
         );
