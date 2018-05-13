@@ -11,7 +11,8 @@ import {
     Dimensions,
     TouchableOpacity,
     AsyncStorage,
-    Image
+    Image,
+    Picker
 } from "react-native";
 import Geocoder from 'react-native-geocoder';
 
@@ -23,6 +24,9 @@ import MKSpinner from "../Component/MKSpinner";
 
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import PickerModal from 'react-native-picker-modal';
+
 import MultiSelect from 'react-native-multiple-select';
 var ImagePicker = require('react-native-image-picker');
 
@@ -37,6 +41,8 @@ export default class AdPostPageOne extends Component {
         super(props);
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
+            getDynamicFieldsJson : [],
+            sendDynamicFieldsJson : {},
             initialPosition: null,
             lastPosition: null,
             stage: 0,
@@ -80,12 +86,24 @@ export default class AdPostPageOne extends Component {
 	this.navigate=this.props.navigateTo;
         this.onFocus = this.onFocus.bind(this);
         this.onSelectedItemsChange = this.onSelectedItemsChange.bind(this);
+        this.updateMyDynamicState = this.updateMyDynamicState.bind(this);
     }
     watchID: number = null;
 
     updateMyState(value, keyName) {
         this.setState({
             [keyName]: value
+        });
+    }
+
+    updateMyDynamicState(value, keyName) {
+        var sendDynamicFieldsJson = this.state.sendDynamicFieldsJson;
+
+        sendDynamicFieldsJson[keyName] = value;
+
+
+        this.setState({
+            sendDynamicFieldsJson: sendDynamicFieldsJson
         });
     }
 
@@ -317,6 +335,7 @@ export default class AdPostPageOne extends Component {
             that.setState({isLoading: false});
         }, 500);
 
+        that.getDynamicFieldsforAdPostFromApps(categoryId, subCategoryId);
     }
 
    async onPressToSelectSubCategory(categoryId, category){
@@ -344,6 +363,7 @@ export default class AdPostPageOne extends Component {
         }
         that.setState({isLoading: false});
 
+       that.getDynamicFieldsforAdPostFromApps(categoryId, "");
     }
 
     async doAdPost(){
@@ -394,8 +414,15 @@ export default class AdPostPageOne extends Component {
             postJson.append('userCode', userCode);
 
             postJson.append('rf', "json");
-            that.setState({isLoading : true});
 
+            //append dynamic fieds value
+            var sendDynamicFieldsJson = that.state.sendDynamicFieldsJson;
+            Object.keys(sendDynamicFieldsJson).forEach(function (index) {
+                var sendDynamicFieldsValue = sendDynamicFieldsJson[index];
+                postJson.append(index, sendDynamicFieldsValue);
+            });
+
+            that.setState({isLoading : true});
             var response = await doPost(subUrl, postJson);
 
             if(response != null && response != "" && response != undefined){
@@ -419,7 +446,25 @@ export default class AdPostPageOne extends Component {
 
             }
             that.setState({isLoading : false});
+        }
 
+    }
+
+    async getDynamicFieldsforAdPostFromApps(categoryId, subCategoryId){
+
+        var that = this;
+        var subUrl = "getDynamicFieldsforAdPostFromApps";
+        var postJson = new FormData();
+        postJson.append("categoryId", categoryId);
+        postJson.append("action", "add");
+        postJson.append("adsId", "0");
+        postJson.append("subCategoryId", subCategoryId);
+        var response = await doPost(subUrl, postJson);
+        if(response != null && response != "" && response != undefined){
+           // alert(JSON.stringify(response))
+            that.setState({
+                getDynamicFieldsJson : response
+            })
         }
 
     }
@@ -502,35 +547,6 @@ export default class AdPostPageOne extends Component {
             cityIdError = <Text
                 style={[CommonStyle.errorText, {paddingBottom : 20, paddingTop : -10}]}>{this.state.errorsJson.cityId}</Text>;
         }
-
-        var items = [{
-            id: '92iijs7yta',
-            name: 'Ondo',
-        }, {
-            id: 'a0s0a8ssbsd',
-            name: 'Ogun',
-        }, {
-            id: '16hbajsabsd',
-            name: 'Calabar',
-        }, {
-            id: 'nahs75a5sg',
-            name: 'Lagos',
-        }, {
-            id: '667atsas',
-            name: 'Maiduguri',
-        }, {
-            id: 'hsyasajs',
-            name: 'Anambra',
-        }, {
-            id: 'djsjudksjd',
-            name: 'Benue',
-        }, {
-            id: 'sdhyaysdj',
-            name: 'Kaduna',
-        }, {
-            id: 'suudydjsjd',
-            name: 'Abuja',
-        }];
 
         var resContentImg = [];
 
@@ -617,16 +633,6 @@ export default class AdPostPageOne extends Component {
         </View>;
 
         var dynamicBtn = null;
-        {
-         /*
-        dynamicBtn = <MKButton onPress={()=> this.doContinue()}
-                               style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}}
-                               textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'}
-                               btndisabled={this.state.isLoading}>CONTINUE</MKButton>;
-
-        */
-        }
-
         dynamicBtn = <MKButton onPress={()=> this.doAdPost()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
             POST AD
         </MKButton>;
@@ -659,13 +665,71 @@ export default class AdPostPageOne extends Component {
         if(that.state.lastPosition != null){
             //displayLocationContent = that.getCurrentLocationAsString();
         }
+
+
+        //dynamic fields list
+        var dynamicFieldsData = [];
+        var getDynamicFieldsJson = that.state.getDynamicFieldsJson;
+        if(getDynamicFieldsJson.length > 0){
+            Object.keys(getDynamicFieldsJson).forEach(function(index){
+                var dynamicFieldsJson = getDynamicFieldsJson[index];
+
+                var isStatic= dynamicFieldsJson['isStatic'];
+                var capturedVariableId= dynamicFieldsJson['capturedVariableId'];
+                var dynamicInputType= dynamicFieldsJson['dynamicInputType'];
+                var capturedVariableName = dynamicFieldsJson['capturedvariablename'];
+                var optionsList = dynamicFieldsJson['optionsList'];
+
+                if(isStatic !== "yes"){
+                    capturedVariableId = "capturedvariablename_"+capturedVariableId;
+                }
+
+                if(dynamicInputType === "Input Box" || dynamicInputType === "Textarea"){
+                    dynamicFieldsData.push(
+                      <View key={capturedVariableId}>
+                          <MKTextInput label={capturedVariableName} highlightColor={inputHighlightColor}
+                                       multiline={true}
+                                       onChangeText={(val) => that.updateMyDynamicState(val, [capturedVariableId])}
+                                       value={that.state.sendDynamicFieldsJson[capturedVariableId] }
+                                       inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
+                                       returnKeyType={'next'} ref={capturedVariableId}
+                              />
+                      </View>
+                    );
+                } else if(dynamicInputType === "Select Box" || dynamicInputType === "Check Box" || dynamicInputType === "Radio Button"){
+
+                    var pickerItem = [];
+                    pickerItem.push(
+                        <Picker.Item label={"Select " + capturedVariableName} value="" key={0} />
+                    );
+                    Object.keys(optionsList).forEach(function(index){
+                        var dynamicInputValue = optionsList[index].dynamicInputValue;
+                        pickerItem.push(
+                            <Picker.Item label={dynamicInputValue} value={dynamicInputValue} key={index} />
+                        );
+                    });
+
+                    dynamicFieldsData.push(
+                      <View key={capturedVariableId}>
+                          <View style={{paddingTop: 20}}></View>
+                          <PickerModal
+                              selectedValue={that.state.sendDynamicFieldsJson[capturedVariableId] }
+                              onValueChange={(val, itemIndex) => that.updateMyDynamicState(val, [capturedVariableId])}>
+                              {pickerItem}
+                          </PickerModal>
+                      </View>
+                    );
+                }
+            });
+        }
+
         return (
             <View style={[{height : this.state.height, flex: 1, width : layoutWidth}]}
                   onLayout={()=> this.updateLayout()}>
                 <ScrollView style={{ flex: 1, padding : 10}}>
                     <Text style={{fontWeight : "bold",  paddingBottom : 15, paddingTop : 15}}>Please choose Category</Text>
                     {
-                        displayLocationContent
+                        //displayLocationContent
                     }
                     <ListView
                         horizontal={true}
@@ -678,6 +742,7 @@ export default class AdPostPageOne extends Component {
                     {subCategoryContent}
                     {afterSubCategory}
                     {displayContent}
+                    {dynamicFieldsData}
                     <View style={{paddingTop: 30}}></View>
                 </ScrollView>
                 {dynamicBtn}
