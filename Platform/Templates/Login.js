@@ -18,8 +18,6 @@ export default class Login extends Component {
 		var {height, width} = Dimensions.get('window');
 	    	super(props);
 		this.state = {
-			isLoading : false,
-			isCancelable : true,
 			height : height,
 			width : width,
 			errorsJson:{
@@ -86,7 +84,7 @@ export default class Login extends Component {
 			postJson.append("username", that.state.inputMobileNumber);
 			postJson.append("password", that.state.inputPassword);
 			var subUrl = "getLoginFromApps";
-			that.setState({isLoading : true});
+			that.props.updateLoading(true);
 			var response = await doPost(subUrl, postJson);
 			if(response != null){
 
@@ -106,7 +104,7 @@ export default class Login extends Component {
 					await AsyncStorage.setItem('username', that.state.inputMobileNumber);
 					await AsyncStorage.setItem('password', that.state.inputPassword);
 
-					that.setState({isLoading : false});
+					that.props.updateLoading(false);
 
 					alertType = 'success';
 					title = "Success!";
@@ -121,8 +119,7 @@ export default class Login extends Component {
 						that.onPressRedirect("Dashboard");
 					}, 1000);
 				} else if(active == "InActive"){
-					that.setState({isLoading : false});
-
+					that.props.updateLoading(false);
 					alertType = 'error';
 					title = "Error!";
 					message="Your Profile was not activated!";
@@ -133,8 +130,7 @@ export default class Login extends Component {
 						position: 'bottom',
 					});
 				} else {
-					that.setState({isLoading : false});
-
+					that.props.updateLoading(false);
 					alertType = 'error';
 					title = "Error!";
 					message="Username/Password is incorrect";
@@ -225,7 +221,6 @@ export default class Login extends Component {
 					</TouchableOpacity>
 				</View>
 			</ScrollView>
-            <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
             <MKButton onPress={()=> this.getLogin()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} >
 				LOGIN
 			</MKButton>
