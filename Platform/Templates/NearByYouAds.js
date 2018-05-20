@@ -16,7 +16,6 @@ import {
 } from "react-native";
 
 import { Container, Navbar } from 'navbar-native';
-import MKSpinner from "../Component/MKSpinner";
 import SearchAdsContent from "./SearchAdsContent";
 import { doPost } from "../Component/MKActions";
 
@@ -27,7 +26,6 @@ export default class NearByYouAds extends Component {
         super(props);
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            isLoading: false,
             height: height,
             width: width,
             searchText: "",
@@ -84,12 +82,12 @@ export default class NearByYouAds extends Component {
         postJson.append("searchUserId", that.state.searchUserId);
         postJson.append("rf", "json");
         var subUrl = "searchAdsAjax";
-        that.updateMyState(true, 'isLoading');
+        that.props.updateLoading(true);
         var response = await doPost(subUrl, postJson);
         //alert(JSON.stringify(postJson))
 
         setTimeout(function () {
-            that.updateMyState(false, 'isLoading');
+            that.props.updateLoading(false);
         }, 1000);
 
         if (response != null) {
@@ -146,9 +144,6 @@ export default class NearByYouAds extends Component {
                         <View style={ {width : layoutWidth/2}}>{ previousBtn }</View>
                         <View style={ {width : layoutWidth/2}}>{ nextBtn }</View>
                     </View>
-                    <MKSpinner visible={this.state.isLoading} textContent={"Please wait"}
-                               cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}}/>
-
                 </ScrollView>
             </View>
         );

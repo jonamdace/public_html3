@@ -170,8 +170,11 @@ export default class App extends Component {
 			switch (routeName) {
 
 		case 'HomeScreen':
-			return <HomeScreen navigator={navigator} {...route.passProps} 
-navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />;
+			return <View style={{ flex: 1 }}>
+			<HomeScreen navigator={navigator} {...route.passProps}
+navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
+<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
+</View>;
 
 		case 'AdPostPageOne':		
 			return <Drawer type="overlay" content={<DrawerMenu navigate={this.navigateToMenu} 
@@ -191,6 +194,7 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 						navigateTo={this.navigateTo} 
 						updateLoginStatus={this.updateLoginStatus} 
 						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
 		case 'Dashboard':		
@@ -211,6 +215,7 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 						navigateTo={this.navigateTo} 
 						updateLoginStatus={this.updateLoginStatus} 
 						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
 		case 'Signup':
@@ -230,7 +235,6 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 			return <View style={{ flex: 1 }}>
 			<SearchAdsContent navigator={navigator} {...route.passProps} 
 navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLoading={this.updateLoading} />
-<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 				</View>;
 		case 'AdsGallery':
 			return <View style={{ flex: 1 }}>
@@ -277,6 +281,7 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
 		case 'ViewAllMyAds':
@@ -297,6 +302,7 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
 		case 'Bookmarked':
@@ -317,6 +323,7 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
 		case 'NearByYouAds':
@@ -337,6 +344,7 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
 		case 'MyProfile':
@@ -357,6 +365,7 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
 		case 'EditMyProfile':
@@ -383,6 +392,7 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
 		case 'ViewHistory':
@@ -403,14 +413,16 @@ navigateTo={this.navigateTo}  updateLoginStatus={this.updateLoginStatus} updateL
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
 		case 'AdsView':
-			return <AdsView navigator={navigator}
+			return <View style={{ flex: 1 }}><AdsView navigator={navigator}
 						{...route.passProps} 
 						navigateTo={this.navigateTo} 
 						updateLoginStatus={this.updateLoginStatus} 
-						updateLoading={this.updateLoading} />;
+						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} /></View>;
 
 		default:
 			return <View style={{ flex: 1 }}>

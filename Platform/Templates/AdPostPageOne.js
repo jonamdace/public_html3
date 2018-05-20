@@ -48,8 +48,6 @@ export default class AdPostPageOne extends Component {
             stage: 0,
             selectedItems: [],
             isDateTimePickerVisible: false,
-            isLoading: false,
-            isCancelable: true,
             height: height,
             width: width,
             adsTitle : '',
@@ -309,7 +307,7 @@ export default class AdPostPageOne extends Component {
     async getCategoryListFromApps() {
         var that = this;
         var subUrl = "getCategoryListFromApps";
-        that.setState({isLoading: true});
+        that.props.updateLoading(true);
         var categoryJson = await doPost(subUrl, null);
         if (categoryJson != null) {
             categoryJson = categoryJson.sort(function (a, b) {
@@ -319,35 +317,34 @@ export default class AdPostPageOne extends Component {
             that.updateMyState(that.state.ds.cloneWithRows(categoryJson), 'listItems');
             await AsyncStorage.setItem('categoryJson', JSON.stringify(categoryJson));
         }
-        that.setState({isLoading: false});
+        that.props.updateLoading(false);
     }
 
     async onPressToSetSubCategory(categoryId, subCategoryId, subCategory){
         var that = this;
-
+        that.props.updateLoading(true);
         await that.setState({
             subCategoryId : subCategoryId,
-            subCategory : subCategory,
-            isLoading: true
+            subCategory : subCategory
         });
 
-        setTimeout(function(){
-            that.setState({isLoading: false});
-        }, 500);
-
         that.getDynamicFieldsforAdPostFromApps(categoryId, subCategoryId);
+
+        setTimeout(function(){
+            that.props.updateLoading(false);
+        }, 500);
     }
 
    async onPressToSelectSubCategory(categoryId, category){
+       var that = this;
 
+       that.props.updateLoading(true);
         await this.setState({
             categoryId : categoryId,
             category : category,
-            subCategoryId : "0",
-            isLoading: true
+            subCategoryId : "0"
         });
 
-       var that = this;
        var subUrl = "Frontend/getCommonJsonData";
        var postJson = new FormData();
        postJson.append("categoryId", that.state.categoryId);
@@ -361,7 +358,7 @@ export default class AdPostPageOne extends Component {
             });
             that.updateMyState(that.state.ds.cloneWithRows(subCategoryJson), 'listItemsSubCategoryJson');
         }
-        that.setState({isLoading: false});
+       that.props.updateLoading(false);
 
        that.getDynamicFieldsforAdPostFromApps(categoryId, "");
     }
@@ -422,7 +419,7 @@ export default class AdPostPageOne extends Component {
                 postJson.append(index, sendDynamicFieldsValue);
             });
 
-            that.setState({isLoading : true});
+            that.props.updateLoading(true);
             var response = await doPost(subUrl, postJson);
 
             if(response != null && response != "" && response != undefined){
@@ -445,7 +442,7 @@ export default class AdPostPageOne extends Component {
                 });
 
             }
-            that.setState({isLoading : false});
+            that.props.updateLoading(false);
         }
 
     }
@@ -633,7 +630,7 @@ export default class AdPostPageOne extends Component {
         </View>;
 
         var dynamicBtn = null;
-        dynamicBtn = <MKButton onPress={()=> this.doAdPost()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+        dynamicBtn = <MKButton onPress={()=> this.doAdPost()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'}>
             POST AD
         </MKButton>;
 
@@ -745,7 +742,6 @@ export default class AdPostPageOne extends Component {
                     {dynamicFieldsData}
                     <View style={{paddingTop: 30}}></View>
                 </ScrollView>
-                <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}}/>
                 {dynamicBtn}
                 <MessageBarAlert ref="alert" />
             </View>

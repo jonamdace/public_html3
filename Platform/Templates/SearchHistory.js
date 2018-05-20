@@ -17,12 +17,9 @@ import {
 
 import CommonStyle from "../Styles/CommonStyle";
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MKSpinner from "../Component/MKSpinner";
-import { Container, Navbar } from 'navbar-native';
+import { Navbar } from 'navbar-native';
 
 export default class Search extends Component {
-
-    static navigationOptions = {title: 'Welcome', header: null};
 
     constructor(props:Object) {
         var {height, width} = Dimensions.get('window');

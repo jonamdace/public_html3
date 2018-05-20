@@ -7,7 +7,6 @@ import CommonStyle from "../Styles/CommonStyle";
 import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
 import { doPost } from "../Component/MKActions";
-import MKSpinner from "../Component/MKSpinner";
 import PickerModal from 'react-native-picker-modal';
 
 var MessageBarAlert = require('react-native-message-bar').MessageBar;
@@ -20,8 +19,6 @@ export default class EditMyProfile extends Component {
         var {height, width} = Dimensions.get('window');
         super(props);
         this.state = {
-            isLoading : false,
-            isCancelable : true,
             height : height,
             width : width,
             errorsJson:{
@@ -158,7 +155,7 @@ export default class EditMyProfile extends Component {
         });
         await that.updateMyState(errorsJson, 'errorsJson');
         if(isValid == 1){
-            that.setState({isLoading : true});
+            that.props.updateLoading(true);
             var postJson = new FormData();
             postJson.append("name", that.state.name);
             postJson.append("email", that.state.emailId);
@@ -193,7 +190,7 @@ export default class EditMyProfile extends Component {
                     position: 'bottom',
                 });
             }
-            that.setState({isLoading : false});
+            that.props.updateLoading(false);
         }
     }
 
@@ -288,7 +285,7 @@ export default class EditMyProfile extends Component {
             inputaddressError = <Text style={CommonStyle.errorText}>{this.state.errorsJson.address}</Text>;
         }
 
-        var dynamicBtn = <MKButton onPress={()=> this.updateMyProfile()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+        var dynamicBtn = <MKButton onPress={()=> this.updateMyProfile()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} >
             Submit
         </MKButton>;
 
@@ -416,7 +413,6 @@ export default class EditMyProfile extends Component {
                         <View style={{paddingTop: 30}}></View>
                     </View>
                 </ScrollView>
-                <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
                 {dynamicBtn}
                 <MessageBarAlert ref="alert" />
             </View>

@@ -2,12 +2,10 @@
 import React, {Component, PropTypes} from "react";
 import {View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage} from "react-native";
 
-import { Container, Navbar } from 'navbar-native';
 import CommonStyle from "../Styles/CommonStyle";
 import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
 import { doPost } from "../Component/MKActions";
-import MKSpinner from "../Component/MKSpinner";
 
 var MessageBarAlert = require('react-native-message-bar').MessageBar;
 var MessageBarManager = require('react-native-message-bar').MessageBarManager;
@@ -19,8 +17,6 @@ export default class ChangePassword extends Component {
         var {height, width} = Dimensions.get('window');
         super(props);
         this.state = {
-            isLoading : false,
-            isCancelable : true,
             height : height,
             width : width,
             errorsJson:{
@@ -78,16 +74,15 @@ export default class ChangePassword extends Component {
         });
         await that.updateMyState(errorsJson, 'errorsJson');
         if(isValid == 1){
-            var userid = await AsyncStorage.getItem('userid');
+            that.props.updateLoading(true);
 
+            var userid = await AsyncStorage.getItem('userid');
             var postJson = new FormData();
             postJson.append("rePassword", that.state.inputRePassword);
             postJson.append("newPassword", that.state.inputPassword);
             postJson.append("rf", "json");
             postJson.append("userid", userid);
-
             var subUrl = "updatePassword";
-            that.setState({isLoading : true});
             var response = await doPost(subUrl, postJson);
             if(response != null && response != "" && response != undefined){
                 var status = response.status;
@@ -114,7 +109,8 @@ export default class ChangePassword extends Component {
                 });
 
             }
-            that.setState({isLoading : false});
+
+            that.props.updateLoading(false);
         }
     }
 
@@ -181,7 +177,6 @@ export default class ChangePassword extends Component {
                         <View style={{paddingTop: 30}}></View>
                     </View>
                 </ScrollView>
-                <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
                 <MKButton onPress={()=> this.changeMyPassword()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} >
                     Update
                 </MKButton>

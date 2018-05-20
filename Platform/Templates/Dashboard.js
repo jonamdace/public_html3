@@ -21,21 +21,17 @@ import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CheckBox from 'react-native-icon-checkbox';
-
 import { doPost } from "../Component/MKActions";
-import MKSpinner from "../Component/MKSpinner";
 
 Geocoder.fallbackToGoogle("AIzaSyCbkW5l6iPkWb551pynfeBn3Lzb69_FFsY");
 
 export default class Dashboard extends Component {
 
-	//static navigationOptions = { title: 'Welcome', header: null };
   	constructor(props: Object) {
 		var {height, width} = Dimensions.get('window');
 	    	super(props);
  		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		this.state = {
-			isLoading : false,
 			isChecked: false,
 			isRadioSelected: true,
 			height : height,
@@ -46,7 +42,7 @@ export default class Dashboard extends Component {
 			latitude: null,
 			longitude: null,
 			userAddress : null,
-	    		listItems : ds.cloneWithRows([]),
+			listItems : ds.cloneWithRows([]),
 			colorArray : ['','#dd0908','#ff9e29','#3fb7d2','#dd0908','#c119ce', '#1963ce','#7fbad8', '#df8012', '#dd0908', '#070c1f', '#f49ecf', '#1ca39d']
 
 		};
@@ -99,7 +95,7 @@ export default class Dashboard extends Component {
 	async getCategoryListFromApps(){
 		var that = this;
 		var subUrl = "getCategoryListFromApps";
-		that.setState({isLoading : true});
+		that.props.updateLoading(true);
 		var categoryJson = await doPost(subUrl, null);
 
 		if(categoryJson != null){	
@@ -109,6 +105,8 @@ export default class Dashboard extends Component {
 			that.updateMyState(that.state.ds.cloneWithRows(categoryJson), 'listItems');
  			await AsyncStorage.setItem('categoryJson', JSON.stringify(categoryJson));
 		}
+		that.props.updateLoading(false);
+
 	}
 
 	updateMyState(value, keyName){

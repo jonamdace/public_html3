@@ -10,7 +10,6 @@ import {
     AsyncStorage
 } from "react-native";
 
-import MKSpinner from "../Component/MKSpinner";
 import MKCard from "../Component/MKCard";
 import Divider from '../Component/divider/Divider';
 import ConfigVariable from '../Component/config/ConfigVariable';
@@ -30,7 +29,6 @@ export default class SearchAdsContent extends Component {
 
     onPressToShowSingleAds(postJson) {
         this.props.navigation('AdsView', postJson);
-        //this.props.navigation.navigate('AdsView', postJson);
     }
 
     async onPressToRemoveFromBookmark(action){

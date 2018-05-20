@@ -15,8 +15,6 @@ import {
     AsyncStorage
 } from "react-native";
 
-import { Container, Navbar } from 'navbar-native';
-import MKSpinner from "../Component/MKSpinner";
 import SearchAdsContent from "./SearchAdsContent";
 import { doPost } from "../Component/MKActions";
 
@@ -27,7 +25,6 @@ export default class ViewAllMyAds extends Component {
         super(props);
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            isLoading: false,
             height: height,
             width: width,
             searchText: "",
@@ -78,20 +75,17 @@ export default class ViewAllMyAds extends Component {
     async dataLoading() {
         var searchResultJson = {};
         var that = this;
+
+        that.props.updateLoading(true);
+
         var postJson = new FormData();
         postJson.append("page", that.state.page);
         postJson.append("getListFromPage", "View All My Ads");
         postJson.append("searchUserId", that.state.searchUserId);
         postJson.append("rf", "json");
         var subUrl = "searchAdsAjax";
-        that.updateMyState(true, 'isLoading');
         var response = await doPost(subUrl, postJson);
         //alert(JSON.stringify(postJson))
-
-        setTimeout(function () {
-            that.updateMyState(false, 'isLoading');
-        }, 1000);
-
         if (response != null) {
             //alert(JSON.stringify(response));
             var searchData = response['searchData'];
@@ -109,8 +103,7 @@ export default class ViewAllMyAds extends Component {
                 that.updateMyState(that.state.ds.cloneWithRows(searchData), 'listItems');
             }
         }
-
-
+        that.props.updateLoading(false);
     }
 
     constructTemplate(item) {
@@ -146,9 +139,6 @@ export default class ViewAllMyAds extends Component {
                         <View style={ {width : layoutWidth/2}}>{ previousBtn }</View>
                         <View style={ {width : layoutWidth/2}}>{ nextBtn }</View>
                     </View>
-                    <MKSpinner visible={this.state.isLoading} textContent={"Please wait"}
-                               cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}}/>
-
                 </ScrollView>
             </View>
         );

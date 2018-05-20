@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from "react";
 import {View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage, Image, ListView} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { doPost } from "../Component/MKActions";
-import MKSpinner from "../Component/MKSpinner";
 import MKButton from "../Component/MKButton";
 
 export default class ViewHistory extends Component {
@@ -13,8 +12,6 @@ export default class ViewHistory extends Component {
 
         super(props);
         this.state = {
-            isLoading: false,
-            isCancelable: true,
             height: height,
             width: width,
             page : '0',
@@ -62,17 +59,16 @@ export default class ViewHistory extends Component {
     async loadsearchData(page){
 
         var that = this;
-        var userid = await AsyncStorage.getItem('userid');
+        that.props.updateLoading(true);
 
+        var userid = await AsyncStorage.getItem('userid');
         var postJson = new FormData();
         postJson.append("getListFromPage", "View My History");
         postJson.append("rf", "json");
         postJson.append("userid", userid);
         postJson.append("rec_limit", 10);
         postJson.append("page", page);
-
         var subUrl = "getHistoryList";
-        this.setState({isLoading : true});
         var response = await doPost(subUrl, postJson);
         if(response != null && response != "" && response != undefined){
             var left_rec = response['left_rec'];
@@ -88,7 +84,7 @@ export default class ViewHistory extends Component {
                 listItems : that.state.ds.cloneWithRows(historyArray)
             });
         }
-        this.setState({isLoading : false});
+        that.props.updateLoading(false);
 
     }
 
@@ -114,14 +110,14 @@ export default class ViewHistory extends Component {
         var btnPrevious = null;
         var btnNext = null;
         if(previousPage>= 0){
-            btnPrevious = <MKButton onPress={()=> this.loadsearchData(previousPage)} style={{backgroundColor : 'orange', borderColor: 'orange', height:50, width:50}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+            btnPrevious = <MKButton onPress={()=> this.loadsearchData(previousPage)} style={{backgroundColor : 'orange', borderColor: 'orange', height:50, width:50}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'}>
                 <Icon name={"arrow-circle-o-left"} color={"#FFF"} size={25} />
             </MKButton>;
                 //'&nbsp;<a href="javascript:void(0)" onclick="loadsearchData('.$previousPage.')" class="btn btn-danger btn-sm"><span class="fa fa-arrow-left text-white fa-1x"></span>&nbsp;Previous '.$rec_limit.'</a>';
         }
 
         if(left_rec>0){
-            btnNext = <MKButton onPress={()=> this.loadsearchData(nextPage)} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:50, width:50}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+            btnNext = <MKButton onPress={()=> this.loadsearchData(nextPage)} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:50, width:50}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'}>
                 <Icon name={"arrow-circle-o-right"} color={"#FFF"} size={25} />
             </MKButton>;
         }
@@ -142,7 +138,6 @@ export default class ViewHistory extends Component {
                     <View style={{ width : 60}}>{btnPrevious}</View>
                     <View style={{ width : 60}}>{btnNext}</View>
                 </View>
-                <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
             </View>);
     }
 

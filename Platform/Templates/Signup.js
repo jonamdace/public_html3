@@ -17,8 +17,6 @@ export default class Login extends Component {
 		var {height, width} = Dimensions.get('window');
 		super(props);
 		this.state = {
-			isLoading : false,
-			isCancelable : true,
 			height : height,
 			width : width,
 			errorsJson:{
@@ -114,7 +112,7 @@ export default class Login extends Component {
 		});
 		await that.updateMyState(errorsJson, 'errorsJson');
 		if(isValid == 1){
-			this.setState({isLoading : true});
+			that.props.updateLoading(true);
 
 			var postJson = new FormData();
 			postJson.append("name", inputNameValue);
@@ -168,7 +166,7 @@ export default class Login extends Component {
 			}
 
 			setTimeout(function(){
-				that.setState({isLoading : false});
+				that.props.updateLoading(false);
 			}, 1000);
 		}
 	}
@@ -214,9 +212,8 @@ export default class Login extends Component {
 
 		await that.updateMyState(errorsJsonOtp, 'errorsJsonOtp');
 		if(isValid == 1){
-
+			that.props.updateLoading(true);
 			that.setState({
-				isLoading : true,
 				otpStatus : "0",
 				inputName : "",
 				inputEmail : "",
@@ -232,7 +229,7 @@ export default class Login extends Component {
 			});
 
 			setTimeout(function(){
-				that.setState({isLoading : false});
+				that.props.updateLoading(false);
 				that.onPressRedirect("Login");
 			}, 2000);
 		}
@@ -313,7 +310,7 @@ export default class Login extends Component {
 
 			<View style={{paddingTop: 30}}></View>
 		</View>;
-		var dynamicBtn = <MKButton onPress={()=> this.doSignup()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'} btndisabled={this.state.isLoading}>
+		var dynamicBtn = <MKButton onPress={()=> this.doSignup()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'}>
 			SIGN UP
 		</MKButton>;
 
@@ -357,7 +354,6 @@ export default class Login extends Component {
 				<ScrollView >
 					{otpContent}
 				</ScrollView>
-				<MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
 				{dynamicBtn}
 				<MessageBarAlert ref="alert" />
 			</View>

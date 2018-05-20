@@ -6,7 +6,6 @@ import CommonStyle from "../Styles/CommonStyle";
 import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
 import Icon from 'react-native-vector-icons/Ionicons';
-import MKSpinner from "../Component/MKSpinner";
 import { doPost } from "../Component/MKActions";
 
 export default class HomeScreen extends Component {
@@ -14,10 +13,8 @@ export default class HomeScreen extends Component {
 	static navigationOptions = { title: 'Welcome', header: null };
   	constructor(props: Object) {
 		var {height, width} = Dimensions.get('window');
-	    	super(props);
+		super(props);
 		this.state = {
-			isLoading : false,
-			isCancelable : true,
 			height : height,
 			width : width,
 			inputMobileNumber : '',
@@ -37,7 +34,7 @@ export default class HomeScreen extends Component {
 			postJson.append("password", password);
 			var subUrl = "getLoginFromApps";
 
-			that.setState({isLoading : true});
+			that.props.updateLoading(true);
 			var response = await doPost(subUrl, postJson);
 			if(response != null){				
 				var active = response['active'];
@@ -51,18 +48,18 @@ export default class HomeScreen extends Component {
 					await AsyncStorage.setItem('lastlogin', lastlogin); 
 					await AsyncStorage.setItem('img', img);
 
-					setTimeout(function(){ 
-						that.setState({isLoading : false}); 
+					setTimeout(function(){
+						that.props.updateLoading(false);
 						that.onPressRedirect("Dashboard");
 					}, 1000);
 				} else if(active == "InActive"){
-					setTimeout(function(){ 
-						that.setState({isLoading : false}); 
+					setTimeout(function(){
+						that.props.updateLoading(false);
 						alert("Your Profile was not activated!");
 					}, 1000);
 				} else {
-					setTimeout(function(){ 
-						that.setState({isLoading : false}); 
+					setTimeout(function(){
+						that.props.updateLoading(false);
 						alert("Username/Password is incorrect");
 					}, 1000);
 				}
@@ -113,7 +110,6 @@ export default class HomeScreen extends Component {
 				</MKButton>
 
 				</View>
-				<MKSpinner visible={this.state.isLoading} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
 			</View>
 		);
 	}

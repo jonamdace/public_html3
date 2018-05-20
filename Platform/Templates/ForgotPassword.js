@@ -1,21 +1,18 @@
 'use strict';
 import React, {Component, PropTypes} from "react";
 import {View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage} from "react-native";
-import { Container, Navbar } from 'navbar-native';
+import { Navbar } from 'navbar-native';
 import CommonStyle from "../Styles/CommonStyle";
 import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
 import { doPost } from "../Component/MKActions";
-import MKSpinner from "../Component/MKSpinner";
 
 export default class Login extends Component {
 
   	constructor(props: Object) {
 		var {height, width} = Dimensions.get('window');
-	    	super(props);
+		super(props);
 		this.state = {
-			isLoading : false,
-			isCancelable : true,
 			height : height,
 			width : width,
 			errorsJson:{
@@ -116,10 +113,10 @@ export default class Login extends Component {
 
 		await that.updateMyState(errorsJsonOtp, 'errorsJsonOtp');
 		if(isValid == 1){
-			that.setState({isLoading : true});
+			that.props.updateLoading(true);
 			await that.updateMyState('3', 'otpStatus');
 			setTimeout(function(){
-				that.setState({isLoading : false});
+				that.props.updateLoading(false);
 			}, 200);
 		}
 	}
@@ -148,6 +145,7 @@ export default class Login extends Component {
 		if(isValid == 1){
 			var otpUserId = that.state['otpUserId'];
 			if(otpUserId > 0){
+				that.props.updateLoading(true);
 
 				var postJson = new FormData();
 				postJson.append("mobileNumber", that.state['inputMobileNumber']);
@@ -156,7 +154,6 @@ export default class Login extends Component {
 				postJson.append("otpText", that.state['inputOtp']);
 
 				var subUrl = "updateMyPasswordFromApps";
-				that.setState({isLoading : true});
 				var response = await doPost(subUrl, postJson);
 				if(response != null){				
 					//alert(JSON.stringify(response));
@@ -170,9 +167,9 @@ export default class Login extends Component {
 						inputPassword : '',
 						inputConfirmPassword : ''
 					});
-					//that.setState({isLoading : false}); 	
+
 					setTimeout(function(){
-						that.setState({isLoading : false});
+						that.props.updateLoading(false);
 					}, 200);
 				}
 			}
@@ -202,22 +199,22 @@ export default class Login extends Component {
 		});
 		await that.updateMyState(errorsJson, 'errorsJson');
 		if(isValid == 1){
+			that.props.updateLoading(true);
+
 			var postJson = new FormData();
 			postJson.append("mobileNumber", that.state.inputMobileNumber);
 			var subUrl = "confirmUserAndSendOtpFromApps";
-			that.setState({isLoading : true});
 			var response = await doPost(subUrl, postJson);
-			if(response != null){				
-				//alert(JSON.stringify(response));
+			if(response != null){
 				that.setState({
 					otpStatus : response['status'],
 					otpMessage: response['message'],
 					otpUserId: response['otpUserId'],
 					otpText : response['otp']
 				});
-				that.setState({isLoading : false}); 
-				//alert(that.state);				
 			}
+
+			that.props.updateLoading(false);
 		}
 	}
 
@@ -367,10 +364,6 @@ export default class Login extends Component {
 					{responseMsg}
 				</View>
 			</ScrollView>
-			<MKSpinner visible={this.state.isLoading}
-					   cancelable={this.state.isCancelable}
-					   textStyle={{color: '#FFF'}}
-					   updateParentState={this.updateState.bind(this)}/>
 			{dynamicBtn}
 		</View>
 		);

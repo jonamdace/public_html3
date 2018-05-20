@@ -11,10 +11,6 @@ import {
 	Image
 	} from "react-native";
 
-import MKSpinner from "../Component/MKSpinner";
-import MKCard from "../Component/MKCard";
-import Divider from '../Component/divider/Divider';
-var banner = require('../images/1stepshop-1.jpg');
 import CommonStyle from "../Styles/CommonStyle";
 import ConfigVariable from '../Component/config/ConfigVariable';
 

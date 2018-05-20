@@ -2,12 +2,10 @@
 import React, {Component, PropTypes} from "react";
 import {Picker, View, StyleSheet, Animated, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, AsyncStorage} from "react-native";
 
-import { Container, Navbar } from 'navbar-native';
 import CommonStyle from "../Styles/CommonStyle";
 import MKButton from "../Component/MKButton";
 import MKTextInput from "../Component/MKTextInput";
 import { doPost } from "../Component/MKActions";
-import MKSpinner from "../Component/MKSpinner";
 import PickerModal from 'react-native-picker-modal';
 
 var MessageBarAlert = require('react-native-message-bar').MessageBar;
@@ -19,8 +17,6 @@ export default class ContactUs extends Component {
         var {height, width} = Dimensions.get('window');
         super(props);
         this.state = {
-            isLoading : false,
-            isCancelable : true,
             height : height,
             width : width,
             errorsJson:{
@@ -105,8 +101,8 @@ export default class ContactUs extends Component {
         });
         await that.updateMyState(errorsJson, 'errorsJson');
         if(isValid == 1){
-            //this.setState({isLoading : true});
-            //this.setState({isLoading : false});
+            that.props.updateLoading(true);
+
             var postJson = new FormData();
             postJson.append("name", that.state.name);
             postJson.append("email", that.state.emailId);
@@ -115,7 +111,6 @@ export default class ContactUs extends Component {
             postJson.append("description", that.state.description);
             postJson.append("rf", "json");
             var subUrl="sendContactUsDetails";
-            that.setState({isLoading : true});
             var response = await doPost(subUrl, postJson);
             if(response != null && response != "" && response != undefined){
                 var status = response.status;
@@ -136,7 +131,7 @@ export default class ContactUs extends Component {
                     position: 'bottom',
                 });
             }
-            that.setState({isLoading : false});
+            that.props.updateLoading(false);
         }
     }
 
@@ -256,7 +251,6 @@ export default class ContactUs extends Component {
                         <View style={{paddingTop: 30}}></View>
                     </View>
                 </ScrollView>
-                <MKSpinner visible={this.state.isLoading} textContent={"Please wait"} cancelable={this.state.isCancelable} textStyle={{color: '#FFF'}} />
                 {dynamicBtn}
                 <MessageBarAlert ref="alert" />
             </View>
