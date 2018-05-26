@@ -36,9 +36,10 @@ export default class MyProfile extends Component {
     }
 
     async componentDidMount() {
-        this.props.updateLoading(true);
-
+        var that = this;
         var userid = await AsyncStorage.getItem('userid');
+
+        this.props.updateLoading(true);
         var postJson = new FormData();
         postJson.append("userid", userid);
         postJson.append("rf", "json");
@@ -59,9 +60,6 @@ export default class MyProfile extends Component {
         }
 
         that.props.updateLoading(false);
-    }
-
-    componentWillUnmount() {
     }
 
     updateMyState(value, keyName) {
