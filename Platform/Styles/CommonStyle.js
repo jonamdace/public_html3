@@ -16,25 +16,26 @@ module.exports = StyleSheet.create({
 		paddingTop : 15
 	},
 	adsViewRow:{
-		flexDirection: 'row'
+		flexDirection: 'row',
 	},
 	adsViewHeader:{
  		flexDirection : 'row', 
-		backgroundColor: '#59C2AF', 
-		minHeight:40, 
+		backgroundColor: '#FFF',
+		minHeight:30,
 		justifyContent:'center', 
 		textAlign:'right', 
 		fontSize: 14, 
-		paddingTop:10, 
+		paddingTop:5,
 		paddingRight:10,
 		fontWeight:'bold',
+		color: '#59C2AF',
 		width: 100
 	},
 	adsViewText:{
  		flexDirection : 'row', 
 		backgroundColor: '#FFF', 
-		minHeight:50, 
-		padding: 10, 
+		minHeight:30,
+		padding: 5,
 		color: colors.primary,
 		alignItems:'center',
 	},

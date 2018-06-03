@@ -30,7 +30,8 @@ export default class AdsView extends Component {
 			width : width,
 			singleAdsJson : {},
 			dynamicAdsDetails : {},
-			adsgalleryDetails:{}
+			adsgalleryDetails:{},
+			adsViewcount : "0"
 		};
 		this.navigate=this.props.navigateTo;
 	}
@@ -47,6 +48,7 @@ export default class AdsView extends Component {
 		var singleAdsJson = null;
 		var dynamicAdsDetails = null;
 		var adsgalleryDetails = null;
+		var adsViewcount = "0";
 		var that = this;
 		if(paramsData != null){
 			var adsId = paramsData['adsId'];
@@ -58,10 +60,11 @@ export default class AdsView extends Component {
 				singleAdsJson = response['adsDetails']
 				dynamicAdsDetails = response['dynamicAdsDetails']
 				adsgalleryDetails = response['adsgalleryDetails']
+				adsViewcount = response['adsViewcount']
 			}
 		}
 
-		this.setState({singleAdsJson : singleAdsJson, adsgalleryDetails : adsgalleryDetails, dynamicAdsDetails : dynamicAdsDetails});
+		this.setState({adsViewcount : adsViewcount, singleAdsJson : singleAdsJson, adsgalleryDetails : adsgalleryDetails, dynamicAdsDetails : dynamicAdsDetails});
 
 		//alert(JSON.stringify(this.state.adsgalleryDetails));
 	}
@@ -98,7 +101,7 @@ export default class AdsView extends Component {
 				 dynamicAdsDetailsArray.push(<View key={key} style={[CommonStyle.adsViewRow]}>
 					 <Text style={[CommonStyle.adsViewHeader]}>
 						 {
-							 dynamicAdsDetailsSingle['capturedvariablename']
+							 dynamicAdsDetailsSingle['capturedvariablename'] + " :"
 						 }
 					 </Text>
 					 <Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
@@ -116,24 +119,45 @@ export default class AdsView extends Component {
 			var singleAdsJson = adsJson[0];
 		descContent = <View>
 			<View style={[CommonStyle.adsViewRow]}>
-				<Text style={[CommonStyle.adsViewHeader]}>
-					Ads Code
+				<Text style={[CommonStyle.adsViewHeader, {color : colors.orange}]}>
+					Basic Details
 				</Text>
-				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
+			</View>
+			<View style={[CommonStyle.adsViewRow]}>
+				<Text style={[CommonStyle.adsViewHeader]}>
+					Ads Code :
+				</Text>
+				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 } ]}>
 					{singleAdsJson['adsCode']}
 				</Text>
 			</View>
 			<View style={[CommonStyle.adsViewRow]}>
 				<Text style={[CommonStyle.adsViewHeader]}>
-					Title
+					No.of Views :
+				</Text>
+				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
+					{ this.state.adsViewcount }
+				</Text>
+			</View>
+			<View style={[CommonStyle.adsViewRow]}>
+				<Text style={[CommonStyle.adsViewHeader]}>
+					Title :
 				</Text>
 				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
 					{singleAdsJson['adsTitle']}
 				</Text>
 			</View>
+			<View style={[CommonStyle.adsViewRow ]}>
+				<Text style={[CommonStyle.adsViewHeader]}>
+					Posted On :
+				</Text>
+				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
+					{singleAdsJson['createdAt']}
+				</Text>
+			</View>
 			<View style={[CommonStyle.adsViewRow]}>
 				<Text style={[CommonStyle.adsViewHeader]}>
-					Price
+					Price :
 				</Text>
 				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
 					{singleAdsJson['offerPrice']}
@@ -144,15 +168,20 @@ export default class AdsView extends Component {
 			}
 			<View style={[CommonStyle.adsViewRow]}>
 				<Text style={[CommonStyle.adsViewHeader]}>
-					Description
+					Description :
 				</Text>
 				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
 					{singleAdsJson['description']}
 				</Text>
 			</View>
 			<View style={[CommonStyle.adsViewRow]}>
+				<Text style={[CommonStyle.adsViewHeader, {color : colors.orange}]}>
+					Location
+				</Text>
+			</View>
+			<View style={[CommonStyle.adsViewRow]}>
 				<Text style={[CommonStyle.adsViewHeader]}>
-					Country
+					Country :
 				</Text>
 				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
 					{singleAdsJson['country']}
@@ -160,7 +189,7 @@ export default class AdsView extends Component {
 			</View>
 			<View style={[CommonStyle.adsViewRow]}>
 				<Text style={[CommonStyle.adsViewHeader]}>
-					State
+					State :
 				</Text>
 				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
 					{singleAdsJson['state']}
@@ -168,20 +197,39 @@ export default class AdsView extends Component {
 			</View>
 			<View style={[CommonStyle.adsViewRow]}>
 				<Text style={[CommonStyle.adsViewHeader]}>
-					City
+					City :
 				</Text>
 				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
 					{singleAdsJson['city']}
 				</Text>
 			</View>
-			<View style={[CommonStyle.adsViewRow ]}>
-				<Text style={[CommonStyle.adsViewHeader]}>
-					Posted On
-				</Text>
-				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
-					{singleAdsJson['createdAt']}
+			<View style={[CommonStyle.adsViewRow]}>
+				<Text style={[CommonStyle.adsViewHeader, {color : colors.orange}]}>
+					Seller Info
 				</Text>
 			</View>
+			<View style={[CommonStyle.adsViewRow ]}>
+				<Text style={[CommonStyle.adsViewHeader]}>
+					Name :
+				</Text>
+				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
+					{singleAdsJson['name']}
+				</Text>
+			</View>
+			<View style={[CommonStyle.adsViewRow ]}>
+				<Text style={[CommonStyle.adsViewHeader]}>
+					Mobile :
+				</Text>
+				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
+					{singleAdsJson['mobile']}
+				</Text>
+			</View>
+			<View style={[CommonStyle.adsViewRow]}>
+				<Text style={[CommonStyle.adsViewHeader, {color : colors.orange}]}>
+					Similar Ads
+				</Text>
+			</View>
+			<View style={{paddingBottom : 10}}></View>
 		</View>;
 
 
@@ -213,7 +261,7 @@ export default class AdsView extends Component {
 
 
     		return ( 
-<View style={[{height : this.state.height, flex: 1, width : deviceWidth, backgroundColor:'#59C2AF'}]} 
+<View style={[{height : this.state.height, flex: 1, width : deviceWidth, backgroundColor:'#FFF'}]}
 	onLayout={()=> this.updateLayout()} >
 	<ScrollView >
 		<View style={[CommonStyle.wrapper]} >
