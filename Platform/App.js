@@ -160,7 +160,7 @@ export default class App extends Component {
 	// Common functions End
 
 	render() {
-		var initialRoutes = 'HomeScreen';
+		var initialRoutes = 'HomeScreen0';
 		//var initialRoutes = 'EditMyProfile';
 
 		const  loginStatus  = this.state.loginStatus;
@@ -178,27 +178,6 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 </View>;
 
 		case 'AdPostPageOne':		
-			return <Drawer type="overlay" content={<DrawerMenu navigate={this.navigateToMenu} 
-				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
-				tapToClose={true}
-				openDrawerOffset={0.2} // 20% gap on the right side of drawer
-				panCloseMask={0.2}
-				closedDrawerOffset={0}
-				styles={drawerStyles}
-				tweenHandler={(ratio) => ({
-					main: { opacity:(2-ratio)/2 }
-				})}
-				>                          
-				<MyCustomizedNavBar title={"Post your ads"} />
-					<AdPostPageOne navigator={navigator} 
-						{...route.passProps} 
-						navigateTo={this.navigateTo} 
-						updateLoginStatus={this.updateLoginStatus} 
-						updateLoading={this.updateLoading} />
-						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
-			</Drawer>;
-
-		case 'AdPostPageEdit':
 			return <Drawer type="overlay" content={<DrawerMenu navigate={this.navigateToMenu}
 				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
 				tapToClose={true}
@@ -211,13 +190,23 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 				})}
 				>
 				<MyCustomizedNavBar title={"Post your ads"} />
-					<AdPostPageEdit navigator={navigator}
+					<AdPostPageOne navigator={navigator}
+						{...route.passProps} 
+						navigateTo={this.navigateTo} 
+						updateLoginStatus={this.updateLoginStatus} 
+						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
+			</Drawer>;
+
+		case 'AdPostPageEdit':
+			return <View style={{ flex: 1 }}>
+			<AdPostPageEdit navigator={navigator}
 						{...route.passProps}
 						navigateTo={this.navigateTo}
 						updateLoginStatus={this.updateLoginStatus}
 						updateLoading={this.updateLoading} />
 						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
-			</Drawer>;
+			</View>;
 
 		case 'Dashboard':
 			return <Drawer type="overlay" content={<DrawerMenu navigate={this.navigateToMenu} 

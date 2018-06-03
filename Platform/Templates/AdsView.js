@@ -29,6 +29,7 @@ export default class AdsView extends Component {
 			height : height,
 			width : width,
 			singleAdsJson : {},
+			dynamicAdsDetails : {},
 			adsgalleryDetails:{}
 		};
 		this.navigate=this.props.navigateTo;
@@ -44,6 +45,7 @@ export default class AdsView extends Component {
 	async componentDidMount() {
 	        var paramsData = this.props.value;
 		var singleAdsJson = null;
+		var dynamicAdsDetails = null;
 		var adsgalleryDetails = null;
 		var that = this;
 		if(paramsData != null){
@@ -54,11 +56,12 @@ export default class AdsView extends Component {
 			var response = await doPost(subUrl, postJson);
 			if(response != null){
 				singleAdsJson = response['adsDetails']
+				dynamicAdsDetails = response['dynamicAdsDetails']
 				adsgalleryDetails = response['adsgalleryDetails']
 			}
 		}
 
-		this.setState({singleAdsJson : singleAdsJson, adsgalleryDetails : adsgalleryDetails});
+		this.setState({singleAdsJson : singleAdsJson, adsgalleryDetails : adsgalleryDetails, dynamicAdsDetails : dynamicAdsDetails});
 
 		//alert(JSON.stringify(this.state.adsgalleryDetails));
 	}
@@ -82,8 +85,33 @@ export default class AdsView extends Component {
 
 		var adsJson = this.state.singleAdsJson;
 		var descContent = null;
+		var descDynamicContent = null;
 		var fileName = null;
 		var fileImage = null;
+
+		var dynamicAdsDetails = this.state.dynamicAdsDetails;
+		var dynamicAdsDetailsArray = [];
+		if(dynamicAdsDetails != null){
+
+			 Object.keys(dynamicAdsDetails).map((key)=> {
+				 var dynamicAdsDetailsSingle = dynamicAdsDetails[key];
+				 dynamicAdsDetailsArray.push(<View key={key} style={[CommonStyle.adsViewRow]}>
+					 <Text style={[CommonStyle.adsViewHeader]}>
+						 {
+							 dynamicAdsDetailsSingle['capturedvariablename']
+						 }
+					 </Text>
+					 <Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
+						 {
+							 dynamicAdsDetailsSingle['capturedVariableValue']
+						  }
+					 </Text>
+				 </View>);
+			 });
+
+		}
+
+
 		if(adsJson != null && adsJson.length>0){
 			var singleAdsJson = adsJson[0];
 		descContent = <View>
@@ -111,6 +139,9 @@ export default class AdsView extends Component {
 					{singleAdsJson['offerPrice']}
 				</Text>
 			</View>
+			{
+				dynamicAdsDetailsArray
+			}
 			<View style={[CommonStyle.adsViewRow]}>
 				<Text style={[CommonStyle.adsViewHeader]}>
 					Description
@@ -176,19 +207,7 @@ export default class AdsView extends Component {
 		</View>
 </Image>
 		}
-/*
-		if(singleAdsJson != null){
-			descContent = Object.keys(singleAdsJson).map((key)=> {
-				return <View  key={key}>
-					<Text  style={{ flexDirection : 'row', backgroundColor: '#59C2AF', minHeight:40, textAlign:'center', fontSize: 14}}>
-						{ key }
-					</Text>
-					<Text  style={{ flexDirection : 'row', backgroundColor: '#FFF', minHeight:50, padding: 10, alignItems:'center'}}>
-						{singleAdsJson[key]}
-					</Text>
-				</View>;
-			})
-		}*/
+
 
 
 

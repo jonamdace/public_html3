@@ -26,6 +26,8 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import PickerModal from 'react-native-picker-modal';
+import { Navbar } from 'navbar-native';
+
 
 import MultiSelect from 'react-native-multiple-select';
 var ImagePicker = require('react-native-image-picker');
@@ -723,6 +725,15 @@ export default class AdPostPageEdit extends Component {
         return (
             <View style={[{height : this.state.height, flex: 1, width : layoutWidth}]}
                   onLayout={()=> this.updateLayout()}>
+                <Navbar
+                    title={"Edit Ads"}
+                    bgColor={'orange'}
+                    left={{
+					icon: "ios-arrow-back",
+					onPress: () => this.onPressRedirect('ViewAllMyAds')
+				    }}
+                    style={{height:60}}
+                    />
                 <ScrollView style={{ flex: 1, padding : 10}}>
                     <Text style={{fontWeight : "bold",  paddingBottom : 15, paddingTop : 15}}>Please choose Category</Text>
                     {

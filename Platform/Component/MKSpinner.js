@@ -51,12 +51,14 @@ const styles = StyleSheet.create({
     right: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute'
+    position: 'absolute',
+    flexDirection : 'row'
   },
   textContent: {
-    top: 80,
+    top: 10,
     height: 50,
     fontSize: 20,
+    paddingLeft : 20,
     fontWeight: 'bold'
   }
 });
@@ -107,12 +109,11 @@ export default class MKSpinner extends React.Component {
   _renderDefaultContent() {
     return (
       <View style={styles.background}>
-        <ActivityIndicator
-          color={this.props.color}
-          size={this.props.size}
-          style={{ flex: 1 }}
-        />
         <View style={styles.textContainer}>
+          <ActivityIndicator
+              color={this.props.color}
+              size={this.props.size}
+              />
           <Text style={[styles.textContent, this.props.textStyle]}>{this.state.textContent}</Text>
         </View>
       </View>);

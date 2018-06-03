@@ -53,8 +53,8 @@ export default class SearchAdsContent extends Component {
     }
 
     async onPressToEdit(){
-
-        alert("test");
+        var postJson = {};
+        this.props.navigation('AdPostPageEdit', postJson);
     }
 
     render() {
