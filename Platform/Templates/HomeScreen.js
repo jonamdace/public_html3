@@ -42,30 +42,29 @@ export default class HomeScreen extends Component {
 				var lastlogin = response['lastlogin']; 
 				var img = response['img'];
 				if(active!=null && (active == "active" ||  active == "InActive")){
-					
-					await AsyncStorage.setItem('active', active); 
+
+					var userid = response['userid'];
+					var userCode = response['userCode'];
+
+					await AsyncStorage.setItem('userid', userid);
+					await AsyncStorage.setItem('userCode', userCode);
+					await AsyncStorage.setItem('active', active);
 					await AsyncStorage.setItem('name', name);
-					await AsyncStorage.setItem('lastlogin', lastlogin); 
+					await AsyncStorage.setItem('lastlogin', lastlogin);
 					await AsyncStorage.setItem('img', img);
 
-					setTimeout(function(){
-						that.props.updateLoading(false);
-						that.onPressRedirect("Dashboard");
-					}, 1000);
+					that.props.updateLoading(false);
+
+					that.onPressRedirect("Dashboard");
+
 				} else if(active == "InActive"){
-					setTimeout(function(){
-						that.props.updateLoading(false);
-						alert("Your Profile was not activated!");
-					}, 1000);
+					alert("Your Profile was not activated!");
 				} else {
-					setTimeout(function(){
-						that.props.updateLoading(false);
-						alert("Username/Password is incorrect");
-					}, 1000);
+					alert("Username/Password is incorrect");
 				}
 			}
+			that.props.updateLoading(false);
 		}
-
 	}
 
 	onPressRedirect(routes){

@@ -53,6 +53,8 @@ export default class EditMyProfile extends Component {
             userid : userid
         });
 
+        this.getStateList();
+
         var postJson = new FormData();
         postJson.append("userid", userid);
         postJson.append("rf", "json");
@@ -69,9 +71,6 @@ export default class EditMyProfile extends Component {
 
             this.getCityList(response.stateId);
         }
-
-        this.getStateList();
-
 
         MessageBarManager.registerMessageBar(this.refs.alert);
     }

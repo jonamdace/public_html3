@@ -59,9 +59,9 @@ export default class ViewHistory extends Component {
     async loadsearchData(page){
 
         var that = this;
+        var userid = await AsyncStorage.getItem('userid');
         that.props.updateLoading(true);
 
-        var userid = await AsyncStorage.getItem('userid');
         var postJson = new FormData();
         postJson.append("getListFromPage", "View My History");
         postJson.append("rf", "json");

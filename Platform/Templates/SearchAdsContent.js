@@ -15,6 +15,7 @@ import Divider from '../Component/divider/Divider';
 import ConfigVariable from '../Component/config/ConfigVariable';
 import CommonStyle from "../Styles/CommonStyle";
 import { doPost } from "../Component/MKActions";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class SearchAdsContent extends Component {
 
@@ -22,7 +23,7 @@ export default class SearchAdsContent extends Component {
 
         super(props);
         this.state = {
-            bookmarkAdd :true
+            bookmarkAdd : this.props.bookmarkAdd
         };
 
     }
@@ -51,6 +52,11 @@ export default class SearchAdsContent extends Component {
         }
     }
 
+    async onPressToEdit(){
+
+        alert("test");
+    }
+
     render() {
 
         var adsTitle = this.props.postJson.adsTitle;
@@ -73,13 +79,14 @@ export default class SearchAdsContent extends Component {
         }
 
         var dynamicContent = null;
-        if(this.props.fromPage != null  && this.props.fromPage == "View My Bookmarked List"){
+        var editDynamicContent = null;
+        if(this.props.fromPage != null && this.props.fromPage != "View All My Ads"){
 
             if(!this.state.bookmarkAdd){
                 dynamicContent =
                     <TouchableOpacity onPress={()=> this.onPressToRemoveFromBookmark('add')}>
                         <Text
-                            style={[ {textAlign:'left', color:'blue'}]}>
+                            style={[ {textAlign:'left', color:'blue', paddingTop :10, paddingBottom:10}]}>
                             Add to Bookmark
                         </Text>
                     </TouchableOpacity>;
@@ -87,11 +94,19 @@ export default class SearchAdsContent extends Component {
                 dynamicContent =
                     <TouchableOpacity onPress={()=> this.onPressToRemoveFromBookmark('remove')}>
                         <Text
-                            style={[ {textAlign:'left', color:'orange'}]}>
+                            style={[ {textAlign:'left', color:'orange', paddingTop : 10, paddingBottom: 10}]}>
                             Remove from Bookmark
                         </Text>
                     </TouchableOpacity>;
             }
+        } else if(this.props.fromPage == "View All My Ads"){
+            editDynamicContent =
+                <TouchableOpacity onPress={()=> this.onPressToEdit()}>
+                    <Text
+                        style={[ CommonStyle.imageCardTitle, {textAlign:'right', color:'blue'}]}>
+                        Edit <Icon name='edit' color='blue' size={15} style={{padding :5}}/>
+                    </Text>
+                </TouchableOpacity>;
         }
 
         return (
@@ -99,7 +114,13 @@ export default class SearchAdsContent extends Component {
                 {fileImage}
                 <Divider style={CommonStyle.divider}/>
                 <Text style={[ CommonStyle.imageCardTitle,{fontWeight:'bold'}]}>{adsTitle}</Text>
-                <Text style={[ CommonStyle.imageCardTitle]}>{adsLocation} | {postedDate} </Text>
+                <Text style={[ CommonStyle.imageCardTitle]}>{adsLocation}</Text>
+                <View style={{flexDirection:'row'}}>
+                    <View style={{width : this.props.imgWidth-130}}>
+                        <Text style={[ CommonStyle.imageCardTitle]}>{postedDate} </Text>
+                    </View>
+                    <View style={{width : 110}}>{ editDynamicContent }</View>
+                </View>
                 <View style={{flexDirection:'row'}}>
                     <Text
                         style={[ CommonStyle.imageCardTitle, {width: 80, textAlign:'left', fontWeight:'bold', color:'#F9CE0D'}]}>₹{adsAmt}</Text>

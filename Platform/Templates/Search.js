@@ -36,7 +36,9 @@ export default class Search extends Component {
             page: "0",
             leftRecord: 0,
             previousPage: -1,
-            nextPage: ""
+            bookmarkArray : [],
+            nextPage: "",
+            searchUserId : ""
         };
         this.navigate = this.props.navigateTo;
     }
@@ -50,10 +52,13 @@ export default class Search extends Component {
 
     async componentDidMount() {
         var paramsArray = this.props.value;
+        var searchUserId = await AsyncStorage.getItem('userid');
+
+
         if (paramsArray != null) {
             var searchText = this.getValueFromArray(paramsArray, 'searchText');
             var categoryId = this.getValueFromArray(paramsArray, 'categoryId');
-            await this.setState({categoryId: categoryId, searchText: searchText});
+            await this.setState({categoryId: categoryId, searchText: searchText, searchUserId : searchUserId});
         }
         await this.dataLoading();
     }
@@ -97,6 +102,7 @@ export default class Search extends Component {
         postJson.append("SubcategoryId", "");
         postJson.append("searchText", this.state.searchText);
         postJson.append("searchUserId", "");
+        postJson.append("userid", this.state.searchUserId);
         postJson.append("rf", "json");
         var subUrl = "searchAdsAjax";
         var response = await doPost(subUrl, postJson);
@@ -107,6 +113,7 @@ export default class Search extends Component {
         if (response != null) {
             //alert(JSON.stringify(response));
             var searchData = response['searchData'];
+            var bookmarkArray = response['bookmarkArray'];
             var page = parseInt(response['page']);
             var leftRecord = parseInt(response['left_rec']);
             var nextPage = page + 1;
@@ -117,6 +124,7 @@ export default class Search extends Component {
                     that.updateMyState(nextPage, 'page');
                 that.updateMyState(previousPage, 'previousPage');
                 that.updateMyState(leftRecord, 'leftRecord');
+                that.updateMyState(bookmarkArray, 'bookmarkArray');
                 that.updateMyState(nextPage, 'nextPage');
                 that.updateMyState(that.state.ds.cloneWithRows(searchData), 'listItems');
             }
@@ -126,10 +134,17 @@ export default class Search extends Component {
     }
 
     constructTemplate(item) {
+
+        var bookmarkAdd = true;
+        var adsId = item['adsId'];
+
+       if(this.state.bookmarkArray.indexOf(adsId) == -1){
+           bookmarkAdd = false;
+       }
         return <SearchAdsContent imgWidth={this.state.width-50}
                                  imgHeight={150}
                                  navigation={this.props.navigateTo}
-                                 postJson={item} fromPage="adsList"/>;
+                                 postJson={item} fromPage="adsList" bookmarkAdd={bookmarkAdd}/>;
     }
 
     render() {

@@ -114,7 +114,7 @@ export default class Bookmarked extends Component {
         return <SearchAdsContent imgWidth={this.state.width-50}
                                  imgHeight={150}
                                  navigation={this.props.navigateTo}
-                                 postJson={item} fromPage="View My Bookmarked List" dataLoading = {this.dataLoading}/>;
+                                 postJson={item} fromPage="View My Bookmarked List" bookmarkAdd={true} dataLoading = {this.dataLoading}/>;
     }
 
     render() {

@@ -29,6 +29,7 @@ import AdsView from "./Templates/AdsView";
 import SearchAdsContent from "./Templates/SearchAdsContent";
 import AdsGallery from "./Templates/AdsGallery";
 import AdPostPageOne from "./Templates/AdPostPageOne";
+import AdPostPageEdit from "./Templates/AdPostPageEdit";
 import MKSpinner from "./Component/MKSpinner";
 
 
@@ -197,7 +198,28 @@ navigateTo={this.navigateTo} updateLoginStatus={this.updateLoginStatus} updateLo
 						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
 			</Drawer>;
 
-		case 'Dashboard':		
+		case 'AdPostPageEdit':
+			return <Drawer type="overlay" content={<DrawerMenu navigate={this.navigateToMenu}
+				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
+				tapToClose={true}
+				openDrawerOffset={0.2} // 20% gap on the right side of drawer
+				panCloseMask={0.2}
+				closedDrawerOffset={0}
+				styles={drawerStyles}
+				tweenHandler={(ratio) => ({
+					main: { opacity:(2-ratio)/2 }
+				})}
+				>
+				<MyCustomizedNavBar title={"Post your ads"} />
+					<AdPostPageEdit navigator={navigator}
+						{...route.passProps}
+						navigateTo={this.navigateTo}
+						updateLoginStatus={this.updateLoginStatus}
+						updateLoading={this.updateLoading} />
+						<MKSpinner visible={this.state.isLoading} updateParentState={this.updateParentState} textContent={"Please wait"} cancelable={true} textStyle={{color: '#FFF'}} />
+			</Drawer>;
+
+		case 'Dashboard':
 			return <Drawer type="overlay" content={<DrawerMenu navigate={this.navigateToMenu} 
 				loginStatus={loginStatus} updateLoginStatus={this.updateLoginStatus}/>}
 				tapToClose={true}
