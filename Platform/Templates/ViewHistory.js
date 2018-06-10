@@ -133,8 +133,8 @@ export default class ViewHistory extends Component {
                                   enableEmptySections={true}/>
                     </View>
                 </ScrollView>
-                <View style={{padding : 20}}></View>
-                <View style={{flexDirection : 'row', paddingBottom : 10, right: 0, top: this.state.height - 160, position: 'absolute'}}>
+                <View style={{padding : 5}}></View>
+                <View style={{flexDirection : 'row', paddingBottom : 30, right: 5, top: this.state.height - 160, position: 'absolute'}}>
                     <View style={{ width : 60}}>{btnPrevious}</View>
                     <View style={{ width : 60}}>{btnNext}</View>
                 </View>

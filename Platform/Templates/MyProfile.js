@@ -55,7 +55,8 @@ export default class MyProfile extends Component {
                 districtId: response.districtId,
                 stateId: response.stateId,
                 emailId: response.email,
-                name: response.name
+                name: response.name,
+                userid : userid
             });
         }
 
@@ -73,8 +74,8 @@ export default class MyProfile extends Component {
         this.setState({height: height, width: width});
     }
 
-    onPressRedirect(routes) {
-        this.navigate(routes);
+    onPressRedirect(routes, postJson) {
+        this.navigate(routes, postJson);
     }
 
 
@@ -109,7 +110,7 @@ export default class MyProfile extends Component {
                                 style={{width: inputWidth, height: 200, resizeMode: Image.resizeMode.contain, alignSelf:'center', justifyContent :'center', borderRadius:90}}></Image>;
         var username = this.state.username;
 
-        var dynamicBtn = <MKButton onPress={()=> this.onPressRedirect("EditMyProfile")}
+        var dynamicBtn = <MKButton onPress={()=> this.onPressRedirect("EditMyProfile", {userid : this.state.userid})}
                                    style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF',width: 100, height:50, borderRadius:5}}
                                    textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'}>
             <Icon name="ios-create-outline" size={25} color={"#FFF"}/> Edit
