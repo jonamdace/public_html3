@@ -24,8 +24,8 @@ export default class MyProfile extends Component {
             },
             mobileNumber: '',
             address: '',
-            districtId: '',
-            stateId: '',
+            cityName: '',
+            stateName: '',
             emailId: '',
             name: '',
             userid: '',
@@ -46,14 +46,13 @@ export default class MyProfile extends Component {
         var subUrl = "getUserDetailsFromApps";
         var response = await doPost(subUrl, postJson);
         if (response != null && response != "" && response != undefined) {
-
             this.setState({
                 userCode: response.userCode,
                 userImage: response.img,
                 mobileNumber: response.mobile,
                 address: response.address,
-                districtId: response.districtId,
-                stateId: response.stateId,
+                cityName: response.cityName,
+                stateName: response.stateName,
                 emailId: response.email,
                 name: response.name,
                 userid : userid
@@ -138,8 +137,8 @@ export default class MyProfile extends Component {
 
                         { this.renderRowData(inputWidth, "Mobile", this.state.mobileNumber) }
                         { this.renderRowData(inputWidth, "Email", this.state.emailId) }
-                        { this.renderRowData(inputWidth, "State", this.state.stateId) }
-                        { this.renderRowData(inputWidth, "City", this.state.districtId) }
+                        { this.renderRowData(inputWidth, "State", this.state.stateName) }
+                        { this.renderRowData(inputWidth, "City", this.state.cityName) }
                         { this.renderRowData(inputWidth, "Address", this.state.address) }
 
                         <View style={{paddingTop: 30}}></View>
