@@ -26,8 +26,6 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import PickerModal from 'react-native-picker-modal';
-import { Navbar } from 'navbar-native';
-
 
 import MultiSelect from 'react-native-multiple-select';
 var ImagePicker = require('react-native-image-picker');
@@ -68,9 +66,11 @@ export default class AdPostPageEdit extends Component {
             state : 'Tamil Nadu',
             city : 'Chennai',
             countryId : '1',
-            stateId : '1',
-            cityId: '1',
+            stateId : '',
+            cityId: '',
             address : '',
+            pickerCityList: [],
+            pickerStateList : [],
             colorArray : ['','#dd0908','#ff9e29','#3fb7d2','#dd0908','#c119ce', '#1963ce','#7fbad8', '#df8012', '#dd0908', '#070c1f', '#f49ecf', '#1ca39d'],
             errorsJson: {
                 adsTitle : null,
@@ -83,7 +83,7 @@ export default class AdPostPageEdit extends Component {
                 subCategoryId: null
             }
         };
-	this.navigate=this.props.navigateTo;
+        this.navigate=this.props.navigateTo;
         this.onFocus = this.onFocus.bind(this);
         this.onSelectedItemsChange = this.onSelectedItemsChange.bind(this);
         this.updateMyDynamicState = this.updateMyDynamicState.bind(this);
@@ -94,6 +94,43 @@ export default class AdPostPageEdit extends Component {
         this.setState({
             [keyName]: value
         });
+    }
+
+    async getStateList(){
+
+        var postJson = new FormData();
+        postJson.append("countryId", 1);
+        postJson.append("divId", "stateIdDiv");
+        postJson.append("rf", "json");
+        var subUrl="getStates";
+        var response = await doPost(subUrl, postJson);
+        if(response != null && response != "" && response != undefined){
+
+            this.setState({
+                pickerStateList : response
+            });
+        }
+    }
+
+    async getCityList(stateId){
+
+        this.setState({
+            cityId : ""
+        });
+        this.props.updateLoading(true);
+        var postJson = new FormData();
+        postJson.append("countryId", 1);
+        postJson.append("divId", "cityIdDiv");
+        postJson.append("actionId", stateId);
+        postJson.append("rf", "json");
+        var subUrl="getStates";
+        var response = await doPost(subUrl, postJson);
+        if(response != null && response != "" && response != undefined){
+            this.setState({
+                pickerCityList : response
+            });
+        }
+        this.props.updateLoading(false);
     }
 
     updateMyDynamicState(value, keyName) {
@@ -236,6 +273,8 @@ export default class AdPostPageEdit extends Component {
 
     async componentDidMount() {
 
+        await this.getStateList();
+
         var that = this;
         const categoryJson = await AsyncStorage.getItem('categoryJson');
         if (categoryJson == null) {
@@ -251,18 +290,18 @@ export default class AdPostPageEdit extends Component {
     getCurrentLocation(){
         navigator.geolocation.getCurrentPosition(
             (position) => {
-           // const initialPosition = JSON.stringify(position);
-            this.setState({ initialPosition : position});
-        },
-        (error) => {
-            MessageBarManager.showAlert({
-                title: "Error!",
-                message: error.message,
-                alertType: "error",
-                position: 'bottom',
-            });
-        },
-        { enableHighAccuracy: true }
+                // const initialPosition = JSON.stringify(position);
+                this.setState({ initialPosition : position});
+            },
+            (error) => {
+                MessageBarManager.showAlert({
+                    title: "Error!",
+                    message: error.message,
+                    alertType: "error",
+                    position: 'bottom',
+                });
+            },
+            { enableHighAccuracy: true }
         );
 
         this.watchID = navigator.geolocation.watchPosition((position) => {
@@ -337,21 +376,21 @@ export default class AdPostPageEdit extends Component {
         }, 500);
     }
 
-   async onPressToSelectSubCategory(categoryId, category){
-       var that = this;
+    async onPressToSelectSubCategory(categoryId, category){
+        var that = this;
 
-       that.props.updateLoading(true);
+        that.props.updateLoading(true);
         await this.setState({
             categoryId : categoryId,
             category : category,
             subCategoryId : "0"
         });
 
-       var subUrl = "Frontend/getCommonJsonData";
-       var postJson = new FormData();
-       postJson.append("categoryId", that.state.categoryId);
-       postJson.append("subCategoryId", that.state.subCategoryId);
-       postJson.append("divId", "subCategoryIdDiv");
+        var subUrl = "Frontend/getCommonJsonData";
+        var postJson = new FormData();
+        postJson.append("categoryId", that.state.categoryId);
+        postJson.append("subCategoryId", that.state.subCategoryId);
+        postJson.append("divId", "subCategoryIdDiv");
         var data = await doPost(subUrl, postJson);
         if (data != null) {
             var subCategoryJson = data['jsonArrayData'];
@@ -360,9 +399,9 @@ export default class AdPostPageEdit extends Component {
             });
             that.updateMyState(that.state.ds.cloneWithRows(subCategoryJson), 'listItemsSubCategoryJson');
         }
-       that.props.updateLoading(false);
+        that.props.updateLoading(false);
 
-       that.getDynamicFieldsforAdPostFromApps(categoryId, "");
+        that.getDynamicFieldsforAdPostFromApps(categoryId, "");
     }
 
     async doAdPost(){
@@ -405,9 +444,9 @@ export default class AdPostPageEdit extends Component {
             postJson.append('latitude','');
             postJson.append('longitude','');
             postJson.append('countryId','1');
-            postJson.append('actualPrice',that.state.cityId);
-            postJson.append('offerPrice','1');
-            postJson.append('address','1/96 chennai');
+            //postJson.append('actualPrice',that.state.cityId);
+            //postJson.append('offerPrice','1');
+            postJson.append('address', that.state.address);
             postJson.append('mobileNumber', mobileNumber);
             postJson.append('userId', userId);
             postJson.append('userCode', userCode);
@@ -460,7 +499,7 @@ export default class AdPostPageEdit extends Component {
         postJson.append("subCategoryId", subCategoryId);
         var response = await doPost(subUrl, postJson);
         if(response != null && response != "" && response != undefined){
-           // alert(JSON.stringify(response))
+            // alert(JSON.stringify(response))
             that.setState({
                 getDynamicFieldsJson : response
             })
@@ -636,6 +675,69 @@ export default class AdPostPageEdit extends Component {
             POST AD
         </MKButton>;
 
+        var locationList = [];
+        locationList.push(<Text key={"locationText"} style={{fontWeight : "bold", paddingBottom : 15, paddingTop : 15}}>
+            Please choose Location
+        </Text>);
+
+        var pickerStateItem = [];
+        pickerStateItem.push(
+            <Picker.Item label={"Select State"} value="" key={0} />
+        );
+
+        Object.keys(that.state.pickerStateList).forEach(function(index){
+            var dynamicInputValue = that.state.pickerStateList[index].stateId;
+            var state = that.state.pickerStateList[index].state;
+            pickerStateItem.push(
+                <Picker.Item label={state} value={dynamicInputValue} key={index} />
+            );
+        });
+
+        var pickerCityItem = [];
+        pickerCityItem.push(
+            <Picker.Item label={"Select City"} value="" key={0} />
+        );
+        Object.keys(that.state.pickerCityList).forEach(function(index){
+            var dynamicInputValue = that.state.pickerCityList[index].districtId;
+            var district = that.state.pickerCityList[index].district;
+            pickerCityItem.push(
+                <Picker.Item label={district} value={dynamicInputValue} key={index} />
+            );
+        });
+        locationList.push(<View key={"locations"}>
+            <Picker
+                selectedValue={this.state.stateId}
+                onValueChange={
+                            (stateId, itemIndex) =>
+                                {
+                                    that.updateMyState(stateId, 'stateId');
+                                    that.getCityList(stateId);
+                                }
+                                }>
+                { pickerStateItem }
+            </Picker>
+            { stateIdError }
+            <View style={{paddingTop : 10}}></View>
+            <Picker
+                selectedValue={this.state.cityId}
+                onValueChange={(cityId, itemIndex) => that.updateMyState(cityId, 'cityId')}>
+                { pickerCityItem }
+            </Picker>
+            { cityIdError }
+        </View>);
+
+        locationList.push(<View  key={"address"}>
+            <MKTextInput label={'Address'} highlightColor={inputHighlightColor}
+                         multiline={true}
+                         onChangeText={(address) => that.updateMyState(address, 'address')}
+                         value={that.state.address}
+                         inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
+                         returnKeyType={'next'} ref="address"
+                         onSubmitEditing={(event) => that.focusNextField('adsTitle')}
+                         onFocus={()=>that.onFocus()}
+                />
+            <View style={{paddingTop : 30}}></View>
+        </View>);
 
         var subCategoryContent = [];
         if(this.state.categoryId != "0"){
@@ -643,12 +745,12 @@ export default class AdPostPageEdit extends Component {
                 {this.state.category}
             </Text>);
             subCategoryContent.push(<ListView key={1}
-                horizontal={true}
-                pageSize = {2}
-                style={{flex:1}}
-                enableEmptySections={true}
-                dataSource={this.state.listItemsSubCategoryJson}
-                renderRow={(data) => this.renderSubCategoryGridItem(data)}
+                                              horizontal={true}
+                                              pageSize = {2}
+                                              style={{flex:1}}
+                                              enableEmptySections={true}
+                                              dataSource={this.state.listItemsSubCategoryJson}
+                                              renderRow={(data) => this.renderSubCategoryGridItem(data)}
                 />);
 
         }
@@ -685,15 +787,15 @@ export default class AdPostPageEdit extends Component {
 
                 if(dynamicInputType === "Input Box" || dynamicInputType === "Textarea"){
                     dynamicFieldsData.push(
-                      <View key={capturedVariableId}>
-                          <MKTextInput label={capturedVariableName} highlightColor={inputHighlightColor}
-                                       multiline={true}
-                                       onChangeText={(val) => that.updateMyDynamicState(val, [capturedVariableId])}
-                                       value={that.state.sendDynamicFieldsJson[capturedVariableId] }
-                                       inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
-                                       returnKeyType={'next'} ref={capturedVariableId}
-                              />
-                      </View>
+                        <View key={capturedVariableId}>
+                            <MKTextInput label={capturedVariableName} highlightColor={inputHighlightColor}
+                                         multiline={true}
+                                         onChangeText={(val) => that.updateMyDynamicState(val, [capturedVariableId])}
+                                         value={that.state.sendDynamicFieldsJson[capturedVariableId] }
+                                         inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
+                                         returnKeyType={'next'} ref={capturedVariableId}
+                                />
+                        </View>
                     );
                 } else if(dynamicInputType === "Select Box" || dynamicInputType === "Check Box" || dynamicInputType === "Radio Button"){
 
@@ -709,14 +811,14 @@ export default class AdPostPageEdit extends Component {
                     });
 
                     dynamicFieldsData.push(
-                      <View key={capturedVariableId}>
-                          <View style={{paddingTop: 20}}></View>
-                          <PickerModal
-                              selectedValue={that.state.sendDynamicFieldsJson[capturedVariableId] }
-                              onValueChange={(val, itemIndex) => that.updateMyDynamicState(val, [capturedVariableId])}>
-                              {pickerItem}
-                          </PickerModal>
-                      </View>
+                        <View key={capturedVariableId}>
+                            <View style={{paddingTop: 20}}></View>
+                            <PickerModal
+                                selectedValue={that.state.sendDynamicFieldsJson[capturedVariableId] }
+                                onValueChange={(val, itemIndex) => that.updateMyDynamicState(val, [capturedVariableId])}>
+                                {pickerItem}
+                            </PickerModal>
+                        </View>
                     );
                 }
             });
@@ -725,16 +827,10 @@ export default class AdPostPageEdit extends Component {
         return (
             <View style={[{height : this.state.height, flex: 1, width : layoutWidth}]}
                   onLayout={()=> this.updateLayout()}>
-                <Navbar
-                    title={"Edit Ads"}
-                    bgColor={'orange'}
-                    left={{
-					icon: "ios-arrow-back",
-					onPress: () => this.onPressRedirect('ViewAllMyAds')
-				    }}
-                    style={{height:60}}
-                    />
                 <ScrollView style={{ flex: 1, padding : 10}}>
+                    {
+                        locationList
+                    }
                     <Text style={{fontWeight : "bold",  paddingBottom : 15, paddingTop : 15}}>Please choose Category</Text>
                     {
                         //displayLocationContent
