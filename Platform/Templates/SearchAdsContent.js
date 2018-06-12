@@ -63,10 +63,19 @@ export default class SearchAdsContent extends Component {
         var adsCode = this.props.postJson.adsCode;
         var userCode = this.props.postJson.userCode;
         var adsId = this.props.postJson.adsId;
-        var adsAmt = this.props.postJson.offerPrice;
+        var offerPrice = this.props.postJson.offerPrice;
+        var actualPrice = this.props.postJson.actualPrice;
+        var adsAmt = 0;
+        if(offerPrice > 0 && offerPrice!= actualPrice){
+            adsAmt = actualPrice + offerPrice;
+            adsAmt = <Text style={[ CommonStyle.imageCardTitle, {width: 80, textAlign:'left', fontWeight:'bold', color:'#F9CE0D'}]}><Text style={{textDecorationLine : "line-through"}}>₹{actualPrice}</Text> ₹{offerPrice} </Text>;
+        } else {
+            adsAmt = <Text style={[ CommonStyle.imageCardTitle, {width: 80, textAlign:'left', fontWeight:'bold', color:'#F9CE0D'}]}>₹{actualPrice}</Text>;
+        }
         var adsLocation = this.props.postJson.state + ', ' + this.props.postJson.city;
         var postedDate = this.props.postJson.createdAt;
         var fileName = this.props.postJson.file_name;
+        var active = this.props.postJson.active;
         var adsImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg==';
         var filePath = ConfigVariable.uploadedAdsFilePathEmpty;
         var fileImage = <Image source={{uri: filePath}}
@@ -119,11 +128,10 @@ export default class SearchAdsContent extends Component {
                     <View style={{width : this.props.imgWidth-130}}>
                         <Text style={[ CommonStyle.imageCardTitle]}>{postedDate} </Text>
                     </View>
-                    <View style={{width : 110}}>{ editDynamicContent }</View>
+                    <View style={{width : 110}}>{ editDynamicContent }<Text style={{textAlign: 'right', padding:5}} >{this.props.postJson.active}</Text></View>
                 </View>
                 <View style={{flexDirection:'row'}}>
-                    <Text
-                        style={[ CommonStyle.imageCardTitle, {width: 80, textAlign:'left', fontWeight:'bold', color:'#F9CE0D'}]}>₹{adsAmt}</Text>
+                    {adsAmt}
                     <TouchableOpacity onPress={()=> this.onPressToShowSingleAds(this.props.postJson)}>
                         <Text
                             style={[ CommonStyle.imageCardTitle, {width: this.props.imgWidth-100,textAlign:'right', color:'#489FDF'}]}>
