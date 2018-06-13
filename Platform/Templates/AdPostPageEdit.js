@@ -96,27 +96,8 @@ export default class AdPostPageEdit extends Component {
         });
     }
 
-    async getStateList(){
-
-        var postJson = new FormData();
-        postJson.append("countryId", 1);
-        postJson.append("divId", "stateIdDiv");
-        postJson.append("rf", "json");
-        var subUrl="getStates";
-        var response = await doPost(subUrl, postJson);
-        if(response != null && response != "" && response != undefined){
-
-            this.setState({
-                pickerStateList : response
-            });
-        }
-    }
-
     async getCityList(stateId){
 
-        this.setState({
-            cityId : ""
-        });
         this.props.updateLoading(true);
         var postJson = new FormData();
         postJson.append("countryId", 1);
@@ -269,11 +250,52 @@ export default class AdPostPageEdit extends Component {
         this.setState({[keyName]: selectedItems});
     }
 
-;
+    async getAdsEditData(){
+        var that = this;
+        var adsId = this.props.value['adsId'];
+
+        var postJson = new FormData();
+        postJson.append("rf", "json");
+        var subUrl = "editMyAds/"+adsId;
+        //that.props.updateLoading(true);
+        var response = await doPost(subUrl, postJson);
+        if (response != null) {
+            if(response['editAdsArray'].length>0){
+                var editAdsArray = response['editAdsArray'][0];
+                this.setState({
+                    pickerStateList : response['stateArray'],
+                    adsTitle : editAdsArray['adsTitle'],
+                    noOfDaysToActive : editAdsArray['noOfDaysToActive'],
+                    startDate : editAdsArray['startDate'],
+                    adsDescription : editAdsArray['description'],
+                    stateId: editAdsArray['stateId'],
+                    cityId: editAdsArray['cityId'],
+                    address: editAdsArray['address'],
+                    userId: editAdsArray['userId'],
+                    userCode: editAdsArray['userCode'],
+                    categoryId: editAdsArray['categoryId'],
+                    adsId: editAdsArray['adsId'],
+                    //sendDynamicFieldsJson : editAdsArray
+                });
+
+                that.onPressToSelectSubCategory(editAdsArray['categoryId'], editAdsArray['category']);
+
+                setTimeout(function(){
+                    that.setState({
+                        subCategoryId: editAdsArray['subCategoryId'],
+                    });
+                    that.onPressToSetSubCategory(editAdsArray['categoryId'], editAdsArray['subCategoryId'], editAdsArray['subCategory']);
+                }, 100)
+
+                that.getCityList(editAdsArray['stateId']);
+
+            }
+        }
+    }
 
     async componentDidMount() {
 
-        await this.getStateList();
+        this.getAdsEditData();
 
         var that = this;
         const categoryJson = await AsyncStorage.getItem('categoryJson');
@@ -382,14 +404,13 @@ export default class AdPostPageEdit extends Component {
         that.props.updateLoading(true);
         await this.setState({
             categoryId : categoryId,
-            category : category,
-            subCategoryId : "0"
+            category : category
         });
 
         var subUrl = "Frontend/getCommonJsonData";
         var postJson = new FormData();
         postJson.append("categoryId", that.state.categoryId);
-        postJson.append("subCategoryId", that.state.subCategoryId);
+        postJson.append("subCategoryId", "0");
         postJson.append("divId", "subCategoryIdDiv");
         var data = await doPost(subUrl, postJson);
         if (data != null) {
@@ -401,7 +422,7 @@ export default class AdPostPageEdit extends Component {
         }
         that.props.updateLoading(false);
 
-        that.getDynamicFieldsforAdPostFromApps(categoryId, "");
+        that.getDynamicFieldsforAdPostFromApps(categoryId, that.state.subCategoryId);
     }
 
     async doAdPost(){
@@ -425,7 +446,8 @@ export default class AdPostPageEdit extends Component {
             var userId = await AsyncStorage.getItem('userid');
             var userCode = await AsyncStorage.getItem('userCode');
 
-            var subUrl = "createBackendAdPost";
+            //var subUrl = "createBackendAdPost";
+            var subUrl = "updateAdPost";
 
             var postJson = new FormData();
             for(var i=0; i<that.state.avatarSourcePostArray.length; i++){
@@ -450,6 +472,7 @@ export default class AdPostPageEdit extends Component {
             postJson.append('mobileNumber', mobileNumber);
             postJson.append('userId', userId);
             postJson.append('userCode', userCode);
+            postJson.append('adsId', that.state.adsId);
 
             postJson.append('rf', "json");
 
@@ -494,12 +517,11 @@ export default class AdPostPageEdit extends Component {
         var subUrl = "getDynamicFieldsforAdPostFromApps";
         var postJson = new FormData();
         postJson.append("categoryId", categoryId);
-        postJson.append("action", "add");
-        postJson.append("adsId", "0");
+        postJson.append("action", "Edit");
+        postJson.append("adsId", that.state.adsId);
         postJson.append("subCategoryId", subCategoryId);
         var response = await doPost(subUrl, postJson);
         if(response != null && response != "" && response != undefined){
-            // alert(JSON.stringify(response))
             that.setState({
                 getDynamicFieldsJson : response
             })
