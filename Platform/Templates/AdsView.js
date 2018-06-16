@@ -8,7 +8,8 @@ import {
 	Platform,
 	Dimensions,
 	ScrollView,
-	Image
+	Image,
+	ListView
 	} from "react-native";
 
 import colors from '../Component/config/colors';
@@ -21,7 +22,10 @@ import Swiper from 'react-native-swiper';
 var {height, width} = Dimensions.get('window');
 export default class AdsView extends Component {
 	static navigationOptions = { title: 'AdsView', header: null };
-  	constructor(props: Object) {
+
+	constructor(props: Object) {
+		const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
 		var {height, width} = Dimensions.get('window');
 	    	super(props);
 		this.state = {
@@ -29,9 +33,11 @@ export default class AdsView extends Component {
 			height : height,
 			width : width,
 			singleAdsJson : {},
+			similaradsArray : {},
 			dynamicAdsDetails : {},
 			adsgalleryDetails:{},
-			adsViewcount : "0"
+			adsViewcount : "0",
+			ds : ds
 		};
 		this.navigate=this.props.navigateTo;
 	}
@@ -48,6 +54,7 @@ export default class AdsView extends Component {
 		var singleAdsJson = null;
 		var dynamicAdsDetails = null;
 		var adsgalleryDetails = null;
+		var similaradsArray = {};
 		var adsViewcount = "0";
 		var that = this;
 		if(paramsData != null){
@@ -61,10 +68,11 @@ export default class AdsView extends Component {
 				dynamicAdsDetails = response['dynamicAdsDetails']
 				adsgalleryDetails = response['adsgalleryDetails']
 				adsViewcount = response['adsViewcount']
+				similaradsArray = response['similaradsArray']
 			}
 		}
 
-		this.setState({adsViewcount : adsViewcount, singleAdsJson : singleAdsJson, adsgalleryDetails : adsgalleryDetails, dynamicAdsDetails : dynamicAdsDetails});
+		this.setState({adsViewcount : adsViewcount, singleAdsJson : singleAdsJson, adsgalleryDetails : adsgalleryDetails, dynamicAdsDetails : dynamicAdsDetails, similaradsArray : similaradsArray});
 
 		//alert(JSON.stringify(this.state.adsgalleryDetails));
 	}
@@ -81,6 +89,27 @@ export default class AdsView extends Component {
 
 	onPressRedirectToPassData(routes, postJson){
 		this.navigate(routes, postJson);
+	}
+
+	renderGridItem(item){
+
+		var fileName = item["file_name"];
+		var filePath = ConfigVariable.uploadedAdsFilePathEmpty;
+		if(fileName != null)
+			filePath = ConfigVariable.uploadedAdsFilePath + '/' + item['userCode'] + '/' + item['adsCode'] + '/' + fileName;
+
+		return (
+			<TouchableOpacity onPress={()=> this.onPressRedirectToPassData('AdsView', item)}>
+				<Image source={{uri: filePath }}  resizeMode={'stretch'} >
+				<View style={{ width: 100, height: 100, borderWidth : 1, borderColor :'#59C2AF', margin : 5, }}>
+					<View style={{flexDirection: "row"}}>
+							<Text style={{textAlign : 'left', fontSize : 10, width: 48,  color :'#FFF', backgroundColor: 'orange'}}>{item['adsCode']}</Text>
+							<Text style={{textAlign : 'right', fontSize : 10, width: 50, color :'#FFF', backgroundColor: '#59C2AF'}}>{  "₹ " + item['offerPrice']}</Text>
+					</View>
+				</View>
+				</Image>
+			</TouchableOpacity>
+		);
 	}
 
 	render() { 
@@ -160,7 +189,9 @@ export default class AdsView extends Component {
 					Price :
 				</Text>
 				<Text style={[CommonStyle.adsViewText, { width: deviceWidth-100 }]}>
-					{singleAdsJson['offerPrice']}
+					{
+						singleAdsJson['offerPrice'] > 0 && singleAdsJson['offerPrice']!= singleAdsJson['actualPrice'] ? <Text><Text style={{textDecorationLine : 'line-through'}}>₹ {singleAdsJson['actualPrice']}</Text> <Text> ₹ {singleAdsJson['offerPrice']}</Text></Text> : "₹ "+ singleAdsJson['actualPrice']
+					}
 				</Text>
 			</View>
 			{
@@ -224,12 +255,30 @@ export default class AdsView extends Component {
 					{singleAdsJson['mobile']}
 				</Text>
 			</View>
-			<View style={[CommonStyle.adsViewRow]}>
-				<Text style={[CommonStyle.adsViewHeader, {color : colors.orange}]}>
-					Similar Ads
-				</Text>
-			</View>
-			<View style={{paddingBottom : 10}}></View>
+			{
+				this.state.similaradsArray.length >0 ? <View>
+					<View style={[CommonStyle.adsViewRow]}>
+						<Text style={[CommonStyle.adsViewHeader, {color : colors.orange}]}>
+							Similar Ads
+						</Text>
+					</View>
+					<ListView
+						horizontal={true}
+						pageSize = {2}
+						style={{flex:1, margin: 10}}
+						enableEmptySections={true}
+						removeClippedSubviews={true}
+						dataSource=	{
+				this.state.ds.cloneWithRows(
+					this.state.similaradsArray
+					//[{adsCode: 'rested'}, {adsCode: 'rested123'}, {adsCode: 'rested123'}, {adsCode: 'rested123'}, {adsCode: 'rested123'}, {adsCode: 'rested123'}, {adsCode: 'rested123'}]
+				)
+				}
+						renderRow={(data) => this.renderGridItem(data)}
+						/>
+				</View> : null
+			}
+			<View style={{paddingBottom : 5}}></View>
 		</View>;
 
 

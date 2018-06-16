@@ -112,8 +112,8 @@ export default class SearchAdsContent extends Component {
             editDynamicContent =
                 <TouchableOpacity onPress={()=> this.onPressToEdit()}>
                     <Text
-                        style={[ CommonStyle.imageCardTitle, {textAlign:'right', color:'blue'}]}>
-                        Edit <Icon name='edit' color='blue' size={15} style={{padding :5}}/>
+                        style={[ CommonStyle.imageCardTitle, {textAlign:'right', color:'#59C2AF'}]}>
+                        Edit <Icon name='edit' color='#59C2AF' size={15} style={{padding :5}}/>
                     </Text>
                 </TouchableOpacity>;
         }
