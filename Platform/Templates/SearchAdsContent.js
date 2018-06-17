@@ -128,7 +128,10 @@ export default class SearchAdsContent extends Component {
                     <View style={{width : this.props.imgWidth-130}}>
                         <Text style={[ CommonStyle.imageCardTitle]}>{postedDate} </Text>
                     </View>
-                    <View style={{width : 110}}>{ editDynamicContent }<Text style={{textAlign: 'right', padding:5}} >{this.props.postJson.active}</Text></View>
+                    <View style={{width : 110}}>
+                        { editDynamicContent }
+                        { this.props.fromPage == "View All My Ads" ? <Text style={{textAlign: 'right', padding:5}} >{this.props.postJson.active}</Text> : null }
+                        </View>
                 </View>
                 <View style={{flexDirection:'row'}}>
                     {adsAmt}
