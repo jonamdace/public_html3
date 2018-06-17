@@ -520,11 +520,33 @@ export default class AdPostPageEdit extends Component {
         postJson.append("action", "Edit");
         postJson.append("adsId", that.state.adsId);
         postJson.append("subCategoryId", subCategoryId);
+        postJson.append("rf", "json");
         var response = await doPost(subUrl, postJson);
         if(response != null && response != "" && response != undefined){
             that.setState({
                 getDynamicFieldsJson : response
             })
+
+
+            if(response.length > 0){
+                Object.keys(response).forEach(function(index) {
+                    var dynamicFieldsJson = response[index];
+
+                    var isStatic = dynamicFieldsJson['isStatic'];
+                    var capturedVariableId = dynamicFieldsJson['capturedVariableId'];
+                    var dynamicInputType = dynamicFieldsJson['dynamicInputType'];
+                    var capturedVariableName = dynamicFieldsJson['capturedvariablename'];
+                    var optionsList = dynamicFieldsJson['optionsList'];
+                    var value = dynamicFieldsJson['value'];
+
+                    if(isStatic !== "yes"){
+                        capturedVariableId = "capturedvariablename_"+capturedVariableId;
+                    }
+                    that.updateMyDynamicState(value, capturedVariableId);
+
+                });
+            }
+
         }
 
     }
@@ -694,7 +716,7 @@ export default class AdPostPageEdit extends Component {
 
         var dynamicBtn = null;
         dynamicBtn = <MKButton onPress={()=> this.doAdPost()} style={{backgroundColor : '#59C2AF', borderColor: '#59C2AF', height:60}} textStyle={{color: '#FFF'}} activityIndicatorColor={'orange'}>
-            POST AD
+            Update Ad
         </MKButton>;
 
         var locationList = [];
@@ -726,6 +748,20 @@ export default class AdPostPageEdit extends Component {
                 <Picker.Item label={district} value={dynamicInputValue} key={index} />
             );
         });
+
+        locationList.push(<View  key={"address"}>
+            <MKTextInput label={'Address'} highlightColor={inputHighlightColor}
+                         multiline={true}
+                         onChangeText={(address) => that.updateMyState(address, 'address')}
+                         value={that.state.address}
+                         inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
+                         returnKeyType={'next'} ref="address"
+                         onSubmitEditing={(event) => that.focusNextField('adsTitle')}
+                         onFocus={()=>that.onFocus()}
+                />
+            <View style={{paddingTop : 30}}></View>
+        </View>);
+
         locationList.push(<View key={"locations"}>
             <Picker
                 selectedValue={this.state.stateId}
@@ -746,19 +782,6 @@ export default class AdPostPageEdit extends Component {
                 { pickerCityItem }
             </Picker>
             { cityIdError }
-        </View>);
-
-        locationList.push(<View  key={"address"}>
-            <MKTextInput label={'Address'} highlightColor={inputHighlightColor}
-                         multiline={true}
-                         onChangeText={(address) => that.updateMyState(address, 'address')}
-                         value={that.state.address}
-                         inputStyle={{fontSize: inputFontSize,  height: inputHeight, width: inputWidth}}
-                         returnKeyType={'next'} ref="address"
-                         onSubmitEditing={(event) => that.focusNextField('adsTitle')}
-                         onFocus={()=>that.onFocus()}
-                />
-            <View style={{paddingTop : 30}}></View>
         </View>);
 
         var subCategoryContent = [];
@@ -802,6 +825,7 @@ export default class AdPostPageEdit extends Component {
                 var dynamicInputType= dynamicFieldsJson['dynamicInputType'];
                 var capturedVariableName = dynamicFieldsJson['capturedvariablename'];
                 var optionsList = dynamicFieldsJson['optionsList'];
+                var value = dynamicFieldsJson['value'];
 
                 if(isStatic !== "yes"){
                     capturedVariableId = "capturedvariablename_"+capturedVariableId;
