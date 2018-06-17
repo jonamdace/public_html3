@@ -105,7 +105,7 @@ export default class DrawerMenu extends Component {
                 {'routes': 'AdPostPageOne', title: 'Post Your Ads', icon : 'adn'},
                 {'routes': 'ViewAllMyAds', title: 'My Ads', icon : 'list'},
                 {'routes': 'Bookmarked', title: 'Bookmark', icon : 'bookmark-o'},
-                {'routes': 'nearByYouAds', title: 'Near By You Ads', icon : 'th-list'},
+                //{'routes': 'nearByYouAds', title: 'Near By You Ads', icon : 'th-list'},
                 {'routes': 'MyProfile', title: 'View My Profile', icon : 'user-circle-o'},
                 {'routes': 'ChangePassword', title: 'Change Password', icon : 'key'},
                 {'routes': 'ViewHistory', title: 'History', icon : 'history'},
