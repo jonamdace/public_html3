@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.sbugert.rnadmob.RNAdMobPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.devfd.RNGeocoder.RNGeocoderPackage;
@@ -17,7 +18,13 @@ import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.InterstitialAd;
+
+
 public class MainApplication extends Application implements ReactApplication {
+
+    private InterstitialAd mInterstitialAd;
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
@@ -29,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNAdMobPackage(),
             new VectorIconsPackage(),
             new ImagePickerPackage(),
             new RNGeocoderPackage(),
@@ -46,5 +54,10 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+
+        MobileAds.initialize(this, "ca-app-pub-3670807734353712~6567535677");
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3670807734353712/7131051573");
   }
 }

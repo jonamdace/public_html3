@@ -23,9 +23,27 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CheckBox from 'react-native-icon-checkbox';
 import { doPost } from "../Component/MKActions";
 
+import {  AdMobInterstitial } from 'react-native-admob';
+
 Geocoder.fallbackToGoogle("AIzaSyCbkW5l6iPkWb551pynfeBn3Lzb69_FFsY");
 
 export default class Dashboard extends Component {
+
+	componentWillMount(){
+
+		AdMobInterstitial.removeAllListeners(); //<- Add this line to close/remove event listener
+		AdMobInterstitial.setAdUnitID("ca-app-pub-3670807734353712/7724704673");
+		//AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
+
+		AdMobInterstitial.requestAd().then(() => AdMobInterstitial.showAd());
+		AdMobInterstitial.addEventListener("adClosed", () => {
+		  // alert("closed");
+		});
+
+		AdMobInterstitial.addEventListener("adFailedToLoad", (e) => {
+		   // alert("adFailedToLoad"+e);
+		});
+	}
 
   	constructor(props: Object) {
 		var {height, width} = Dimensions.get('window');
