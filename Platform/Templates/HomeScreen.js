@@ -89,7 +89,8 @@ export default class HomeScreen extends Component {
 				that.props.updateLoading(false);
 			}
 		} else {
-			this.handleBackButtonClick();
+			alert("Must accept all permissions!");
+//			this.handleBackButtonClick();
 		}
 	}
 
